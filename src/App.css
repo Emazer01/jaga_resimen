@@ -36,3 +36,33 @@
     transform: rotate(360deg);
   }
 }
+
+.form-check-input:focus, .form-control:focus, .form-select:focus, .label::after, label.form-check-label:focus, .form-check-input::after, .form-check-input:not(:disabled):not(.disabled):active:focus {
+  box-shadow:  0 0 10px #74580f;
+}
+
+.sidebar-active {
+  background-color: #74580f;
+}
+.sidebar-link:hover{
+  background-color: #84681f;
+}
+
+.color-menkor{
+  color: #74580f;
+}
+
+.color-menkor:hover{
+  color: #84681f;
+}
+
+.border-menkor {
+  border: solid #74580f;
+}
+
+.font-nunito{
+  font-family: 'Nunito Sans', sans-serif;
+}
+.font-poppins{
+  font-family: 'Poppins', sans-serif;
+}
