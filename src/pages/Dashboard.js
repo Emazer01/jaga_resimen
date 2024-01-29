@@ -8,10 +8,8 @@ import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-
-
-
 export const Dashboard = () => {
+    document.title = 'Dashboard - Pusat Informasi Resimen Korps Kadet'
     const navigate = useNavigate()
     const data = {
         labels: ['Hadir', 'Sakit', 'Izin', 'Tanpa Keterangan'],
@@ -32,40 +30,56 @@ export const Dashboard = () => {
             }
         ]
     };
+
     React.useEffect(() => {
-        function verifikasi(){
+        function verifikasi() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/verify`,
-            {
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-                }
-            }
-        )
-            .then(function (response) {
-                console.log(response)
-                if (response.status == 200) {
-                    setInterval(() => {
-                        const tanggal = new Date().toLocaleString('id-id', { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-                        document.getElementById("tanggal").innerHTML = tanggal
-                        document.getElementById("tanggal2").innerHTML = tanggal
-                        const waktu = new Date().toLocaleString('id-id', { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-                        document.getElementById("waktu").innerHTML = "Pukul " + waktu
-                        document.getElementById("waktu2").innerHTML = "Pukul " + waktu
-                    }, 1000)
-                    if (response.data.role_id != 1) {
-                        document.getElementById("btn-editsatuan").classList.add('d-none')
+                {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("access_token")}`
                     }
-                } else {
-                    navigate('/login')
                 }
-            })
-            .catch(function (error) {
-                navigate('/login')
-            });
+            )
+                .then(function (response) {
+                    if (response.status == 200) {
+                        setInterval(() => {
+                            const tanggal = new Date().toLocaleString('id-id', { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+                            document.getElementById("tanggal").innerHTML = tanggal
+                            //document.getElementById("tanggal2").innerHTML = tanggal
+                            const waktu = new Date().toLocaleString('id-id', { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+                            document.getElementById("waktu").innerHTML = "Pukul " + waktu
+                            //document.getElementById("waktu2").innerHTML = "Pukul " + waktu
+                        }, 1000)
+                        if (response.data.role_id != 1) {
+                            document.getElementById("btn-kelolaAkun").classList.add('d-none')
+
+                            document.getElementById("nav-btn-kelolaAkun").classList.add('d-none')
+                        }
+                        document.getElementById('isi-navbar-username').innerHTML = response.data.username
+                        document.getElementById('isi-sidebar-username').innerHTML = response.data.username
+                    } else {
+                        navigate('/forbidden')
+                    }
+                })
+                .catch(function (error) {
+                    navigate('/forbidden')
+                });
         }
         verifikasi()
+
         document.getElementById('btn-dashboard').classList.add('sidebar-active')
-        document.getElementById('btn-editsatuan').classList.remove('sidebar-active')
+        document.getElementById('btn-jabatan').classList.remove('sidebar-active')
+        document.getElementById('btn-kelolaAkun').classList.remove('sidebar-active')
+        document.getElementById('btn-dataKadet').classList.remove('sidebar-active')
+        document.getElementById('sidebar-username').classList.add('btn-dark')
+        document.getElementById('sidebar-username').classList.remove('btn-secondary')
+
+        document.getElementById('nav-btn-dashboard').classList.add('sidebar-active')
+        document.getElementById('nav-btn-jabatan').classList.remove('sidebar-active')
+        document.getElementById('nav-btn-kelolaAkun').classList.remove('sidebar-active')
+        document.getElementById('nav-btn-dataKadet').classList.remove('sidebar-active')
+        document.getElementById('navbar-username').classList.add('btn-dark')
+        document.getElementById('navbar-username').classList.remove('btn-secondary')
 
     }, [])
 

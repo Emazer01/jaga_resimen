@@ -3,8 +3,8 @@ export const Navbar = () => {
     return (
         <nav class="navbar navbar-expand-lg bg-dark d-block d-md-none font-poppins">
             <div class="container-fluid">
-                <a class="navbar-brand text-white d-flex align-items-center" href="#">
-                    <img src="MENKOR_FIXX.png" alt="Logo" width="40" height="40" class="d-inline-block align-text-top" />
+                <a class="navbar-brand text-white d-flex align-items-center" href="/">
+                    <img src="/MENKOR_FIXX.png" alt="Logo" width="40" height="40" class="d-inline-block align-text-top" />
                     <span className="mx-2">
                         <span className="fw-semibold fs-5">Resimen Korps Kadet</span><br />
                         <span className="fs-6">Pusat Informasi</span>
@@ -17,30 +17,34 @@ export const Navbar = () => {
                 <div class="collapse navbar-collapse p-1" id="navbarSupportedContent">
                     <ul class="nav nav-pills flex-column mb-auto p-2">
                         <li className='my-1'>
-                            <a href="/" id='btn-beranda' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins sidebar-active text-white row">
+                            <a href="/" id='nav-btn-dashboard' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins sidebar-active text-white row">
                                 <i class="bi bi-house-door-fill col-2 p-0 text-center fs-4" />
                                 <span className='px-1 col-10 p-2'>Dashboard</span>
                             </a>
                         </li>
                         <li className='my-1'>
-                            <a href="/perubahan" id='btn-perubahan' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins  text-white row">
-                                <i class="bi bi-pencil-fill col-2 p-0 text-center fs-4" />
-                                <span className='px-1 col-10 p-2'>Perubahan</span>
+                            <a href="/dataKadet" id='nav-btn-dataKadet' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
+                                <i class="bi bi-person-vcard-fill col-2 p-0 text-center fs-4" />
+                                <span className='px-1 col-10 p-2'>Data Kadet</span>
                             </a>
                         </li>
                         <li className='my-1'>
-                            <a href="/tambah" id='btn-tambah' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
-                                <i class="bi bi-file-earmark-plus-fill col-2 p-0 text-center fs-4" />
-                                <span className='px-1 col-10 p-2'>Tambah</span>
+                            <a href="/jabatan" id='nav-btn-jabatan' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
+                                <i class="bi bi-diagram-3-fill col-2 p-0 text-center fs-4" />
+                                <span className='px-1 col-10 p-2 d-flex'>Data Pejabat Menkorps & Dinas Dalam</span>
                             </a>
                         </li>
                         <li className='my-1'>
-                            <a href="/cetak" id='btn-cetak' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
-                                <i class="bi bi-printer-fill col-2 p-0 text-center fs-4" />
-                                <span className='px-1 col-10 p-2'>Cetak</span>
+                            <a href="/kelola" id='nav-btn-kelolaAkun' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
+                                <i class="bi bi-people-fill col-2 p-0 text-center fs-4" />
+                                <span className='px-1 col-10 p-2'>Kelola Akun</span>
                             </a>
                         </li>
                     </ul>
+                    <a href="/user" id='navbar-username' class=" btn btn-dark w-100 p-2 rounded-2 text-decoration-none font-poppins text-white d-flex">
+                        <i class="bi bi-person-circle col-2 p-0 text-center fs-4" />
+                        <span className='px-1 col-10 p-2 text-start' id='isi-navbar-username'>My Profile</span>
+                    </a>
                     <hr className="text-light" />
                     <button onClick={() => {
                         localStorage.clear();
@@ -52,6 +56,5 @@ export const Navbar = () => {
                 </div>
             </div>
         </nav>
-
     )
 }
