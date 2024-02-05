@@ -1,12 +1,11 @@
 import * as React from 'react';
-import axios from 'axios';
-import { Await, useNavigate } from 'react-router-dom';
 import { Sidebar } from '../component/Sidebar';
 import { Navbar } from '../component/Navbar';
+import { verifikasi } from '../function/Verifikasi';
+import { heading2, TimeInterval } from '../component/Minor';
+import { getKadet } from '../function/Get';
 
 export const Kadet = () => {
-    const navigate = useNavigate()
-
     const keterangan_color = {
         'Hadir': '#0b0bbb',
         'Sakit': '#0bbb0b',
@@ -38,74 +37,25 @@ export const Kadet = () => {
     })
 
     React.useEffect(() => {
-        function verifikasi() {
-            axios.get(`${process.env.REACT_APP_BACKEND_URL}/verify`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-                    }
-                }
-            )
-                .then(function (response) {
-                    if (response.status == 200) {
-                        setInterval(() => {
-                            const tanggal = new Date().toLocaleString('id-id', { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-                            document.getElementById("tanggal").innerHTML = tanggal
-                            //document.getElementById("tanggal2").innerHTML = tanggal
-                            const waktu = new Date().toLocaleString('id-id', { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-                            document.getElementById("waktu").innerHTML = "Pukul " + waktu
-                            //document.getElementById("waktu2").innerHTML = "Pukul " + waktu
-                        }, 1000)
-                        if (response.data.role_id != 1) {
-                            document.getElementById("btn-kelolaAkun").classList.add('d-none')
-
-                            document.getElementById("nav-btn-kelolaAkun").classList.add('d-none')
-                        }
-                        document.getElementById('isi-navbar-username').innerHTML = response.data.username
-                        document.getElementById('isi-sidebar-username').innerHTML = response.data.username
-                    } else {
-                        navigate('/forbidden')
-                    }
-                })
-                .catch(function (error) {
-                    navigate('/forbidden')
-                });
-        }
-        function getKadet() {
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            const kadet_nim = urlParams.get('nim')
-            axios.get(`${process.env.REACT_APP_BACKEND_URL}/kadet?nim=${kadet_nim}`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-                    }
-                }
-            )
-                .then(function (response) {
-                    console.log(response.headers);
-                    if (response.status == 200) {
-                        setKadet(response.data)
-                        document.title = `${response.data.kadet_nama} - Pusat Informasi Resimen Korps Kadet`
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                });
-        }
         verifikasi()
-        getKadet()
+        getKadet().then(x => {
+            setKadet(x)
+            if (x) {
+                document.title = `${x.kadet_nama} - Pusat Informasi Resimen Korps Kadet`
+            }
+        })
+        
         document.getElementById('btn-dashboard').classList.remove('sidebar-active')
         document.getElementById('btn-jabatan').classList.remove('sidebar-active')
         document.getElementById('btn-kelolaAkun').classList.remove('sidebar-active')
-        document.getElementById('btn-dataKadet').classList.add('sidebar-active')
+        document.getElementById('btn-personil').classList.add('sidebar-active')
         document.getElementById('sidebar-username').classList.add('btn-dark')
         document.getElementById('sidebar-username').classList.remove('btn-secondary')
 
         document.getElementById('nav-btn-dashboard').classList.remove('sidebar-active')
         document.getElementById('nav-btn-jabatan').classList.remove('sidebar-active')
         document.getElementById('nav-btn-kelolaAkun').classList.remove('sidebar-active')
-        document.getElementById('nav-btn-dataKadet').classList.add('sidebar-active')
+        document.getElementById('nav-btn-personil').classList.add('sidebar-active')
         document.getElementById('navbar-username').classList.add('btn-dark')
         document.getElementById('navbar-username').classList.remove('btn-secondary')
 
@@ -117,18 +67,9 @@ export const Kadet = () => {
             <div className='d-flex'>
                 <Sidebar />
                 <div className='w-100'>
-                    <div className='fs-1 fw-medium text-light font-poppins p-1 pt-md-3 ps-3'>
-                        <span>Data Kadet</span>
-                    </div>
+                    {heading2("Personil/Kadet")}
                     <div className='p-2 p-md-3 d-flex flex-wrap font-nunito'>
-                        <div className='p-1 p-lg-2 pb-3 col-12 col-lg-6 rounded-3 d-flex flex-wrap'>
-                            <div className='card rounded-4 bg-dark shadow-lg text-light w-100 col-12'>
-                                <h2 className='p-3'>
-                                    <span id='tanggal'></span><br />
-                                    <span id='waktu'></span>
-                                </h2>
-                            </div>
-                        </div>
+                        <TimeInterval />
                         <div className='p-1 p-lg-2 pb-3 col-12 col-lg-6 rounded-3 d-flex flex-wrap'>
                             <div className='card rounded-4 bg-dark shadow-lg text-light w-100 col-12'>
                                 <h4 className='card-header d-flex border-bottom'>Penugasan
@@ -153,10 +94,10 @@ export const Kadet = () => {
                                 <h4 className='card-header d-flex border-bottom'>Data Diri
                                     <i class="fs-2 bi bi-person-vcard-fill ms-auto"></i>
                                 </h4>
-                                <div className='card-body row align-item-center px-4'>
-                                    <div className='row'>
+                                <div className='card-body d-flex align-item-center px-4'>
+                                    <div className='d-flex flex-wrap w-100'>
                                         <div className='col-12 col-lg-3'>
-                                            <div className='p-1 '>
+                                            <div className='p-1'>
                                                 <img src={kadet.foto_isi} className="rounded-4 w-100" />
                                             </div>
                                         </div>

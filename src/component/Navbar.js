@@ -16,34 +16,34 @@ export const Navbar = () => {
                 </button>
                 <div class="collapse navbar-collapse p-1" id="navbarSupportedContent">
                     <ul class="nav nav-pills flex-column mb-auto p-2">
-                        <li className='my-1'>
-                            <a href="/" id='nav-btn-dashboard' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins sidebar-active text-white row">
-                                <i class="bi bi-house-door-fill col-2 p-0 text-center fs-4" />
-                                <span className='px-1 col-10 p-2'>Dashboard</span>
+                        <li>
+                            <a href="/" id='nav-btn-dashboard' class="sidebar-link p-2 fs-6 text-decoration-none font-poppins sidebar-active text-white row">
+                                <i class="bi bi-house-door-fill col-2 p-0 text-center fs-5" />
+                                <span className='px-1 col-10 p-1'>Dashboard</span>
                             </a>
                         </li>
-                        <li className='my-1'>
-                            <a href="/dataKadet" id='nav-btn-dataKadet' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
-                                <i class="bi bi-person-vcard-fill col-2 p-0 text-center fs-4" />
-                                <span className='px-1 col-10 p-2'>Data Kadet</span>
+                        <li>
+                            <a href="/personil" id='nav-btn-personil' class="sidebar-link p-2 fs-6 text-decoration-none font-poppins text-white row">
+                                <i class="bi bi-person-vcard-fill col-2 p-0 text-center fs-5" />
+                                <span className='px-1 col-10 p-1'>Personil</span>
                             </a>
                         </li>
-                        <li className='my-1'>
-                            <a href="/jabatan" id='nav-btn-jabatan' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
-                                <i class="bi bi-diagram-3-fill col-2 p-0 text-center fs-4" />
-                                <span className='px-1 col-10 p-2 d-flex'>Data Pejabat Menkorps & Dinas Dalam</span>
+                        <li>
+                            <a href="/jabatan" id='nav-btn-jabatan' class="sidebar-link p-2 fs-6 text-decoration-none font-poppins text-white row">
+                                <i class="bi bi-diagram-3-fill col-2 p-0 text-center fs-5" />
+                                <span className='px-1 col-10 p-1'>Jabatan</span>
                             </a>
                         </li>
-                        <li className='my-1'>
-                            <a href="/kelola" id='nav-btn-kelolaAkun' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
-                                <i class="bi bi-people-fill col-2 p-0 text-center fs-4" />
-                                <span className='px-1 col-10 p-2'>Kelola Akun</span>
+                        <li>
+                            <a href="/kelola" id='nav-btn-kelolaAkun' class="sidebar-link p-2 fs-6 text-decoration-none font-poppins text-white row">
+                                <i class="bi bi-people-fill col-2 p-0 text-center fs-5" />
+                                <span className='px-1 col-10 p-1'>Kelola Akun</span>
                             </a>
                         </li>
                     </ul>
-                    <a href="/user" id='navbar-username' class=" btn btn-dark w-100 p-2 rounded-2 text-decoration-none font-poppins text-white d-flex">
-                        <i class="bi bi-person-circle col-2 p-0 text-center fs-4" />
-                        <span className='px-1 col-10 p-2 text-start' id='isi-navbar-username'>My Profile</span>
+                    <a href="/user" id='navbar-username' class=" btn btn-dark w-100 p-2 fs-6 text-decoration-none font-poppins text-white d-flex">
+                        <i class="bi bi-person-circle col-2 p-0 text-center fs-5" />
+                        <span className='px-1 col-10 p-1 text-start' id='isi-navbar-username'>My Profile</span>
                     </a>
                     <hr className="text-light" />
                     <button onClick={() => {

@@ -1,48 +1,8 @@
 import * as React from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { handleLogin } from '../function/Post';
 
 export const Login = () => {
     document.title = 'Login - Pusat Informasi Resimen Korps Kadet'
-    const navigate = useNavigate()
-    function sleep(ms) {
-        return new Promise(
-            resolve => setTimeout(resolve, ms)
-        );
-    }
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        document.getElementById("login-loading").classList.remove("d-none")
-        const data = new FormData(event.currentTarget);
-        const username = data.get('input-username');
-        const password = data.get('input-password');
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/login`, {
-            username: username,
-            password: password
-        })
-            .then(async function (response) {
-                document.getElementById("login-loading").classList.add("d-none")
-                document.getElementById('login-success').classList.remove("d-none")
-                await sleep(1000)
-                localStorage.setItem('access_token', response.data)
-                navigate('/')
-            })
-            .catch(async function (error) {
-                console.log(error.response);
-                document.getElementById("login-loading").classList.add("d-none")
-                document.getElementById('login-danger-message').innerHTML = error.response.data
-                document.getElementById("login-danger").classList.remove("d-none")
-                await sleep(1500)
-                document.getElementById("login-danger").classList.add("d-none")
-            });
-    }
-
-    function sleep(ms) {
-        return new Promise(
-            resolve => setTimeout(resolve, ms)
-        );
-    }
 
     return (
         <div className="text-center bg-dark bg-gradient d-flex p-3 p-md-5 font-poppins" style={{ minHeight: '100vh' }}>
@@ -59,7 +19,7 @@ export const Login = () => {
                 <div className='col-12 col-lg-6 p-3 p-md-5 d-flex align-items-center'>
                     <div className='w-100 bg-gradient p-3 p-md-5 rounded-4'>
                         <h1>Login</h1>
-                        <form onSubmit={handleSubmit} className='text-start px-md-5'>
+                        <form onSubmit={handleLogin} className='text-start px-md-5'>
                             <div class="my-4">
                                 <label for="exampleFormControlInput1" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="input-username" name='input-username' placeholder="username" />

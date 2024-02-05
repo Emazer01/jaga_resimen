@@ -1,12 +1,12 @@
 import * as React from 'react';
-import axios from 'axios';
-import { Await, useNavigate } from 'react-router-dom';
 import { Sidebar } from '../component/Sidebar';
 import { Navbar } from '../component/Navbar';
+import { verifikasi } from '../function/Verifikasi';
+import { heading2, TimeInterval } from '../component/Minor';
+import { getKadets } from '../function/Get';
 
-export const DataKadet = () => {
-    document.title = 'Data Kadet - Pusat Informasi Resimen Korps Kadet'
-    const navigate = useNavigate()
+export const Personil = () => {
+    document.title = 'Personil - Pusat Informasi Resimen Korps Kadet'
 
     const keterangan_color = {
         'Hadir': '#0b0bbb',
@@ -30,104 +30,52 @@ export const DataKadet = () => {
     })
 
     React.useEffect(() => {
-        function verifikasi() {
-            axios.get(`${process.env.REACT_APP_BACKEND_URL}/verify`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-                    }
-                }
-            )
-                .then(function (response) {
-                    if (response.status == 200) {
-                        setInterval(() => {
-                            const tanggal = new Date().toLocaleString('id-id', { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-                            document.getElementById("tanggal").innerHTML = tanggal
-                            //document.getElementById("tanggal2").innerHTML = tanggal
-                            const waktu = new Date().toLocaleString('id-id', { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-                            document.getElementById("waktu").innerHTML = "Pukul " + waktu
-                            //document.getElementById("waktu2").innerHTML = "Pukul " + waktu
-                        }, 1000)
-                        if (response.data.role_id != 1) {
-                            document.getElementById("btn-kelolaAkun").classList.add('d-none')
-
-                            document.getElementById("nav-btn-kelolaAkun").classList.add('d-none')
-                        }
-                        document.getElementById('isi-navbar-username').innerHTML = response.data.username
-                        document.getElementById('isi-sidebar-username').innerHTML = response.data.username
-                    } else {
-                        navigate('/forbidden')
-                    }
-                })
-                .catch(function (error) {
-                    navigate('/forbidden')
-                });
-        }
-        function getKadets() {
-            axios.get(`${process.env.REACT_APP_BACKEND_URL}/kadets`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-                    }
-                }
-            )
-                .then(function (response) {
-                    if (response.status == 200) {
-                        console.log(response.headers)
-                        setKadets(response.data)
-                        var stringKadets = ``
-                        for (let index = 0; index < response.data.length; index++) {
-                            stringKadets += `<a href='/dataKadet/kadet?nim=${response.data[index].kadet_nim}' class='btn btn-dark rounded-0 d-flex text-start p-0 py-2 row text-decoration-none text-white'>
-                                                <div class='col-2 d-none d-lg-block'>${response.data[index].kadet_nim}</div>
-                                                <div class='col-5 col-lg-3'>${response.data[index].kadet_nama}</div>
-                                                <div class='col-2 col-lg-1'>${response.data[index].jenis_kelamin}</div>
-                                                <div class='col-4 d-none d-lg-block'>${response.data[index].pleton_nama} ${response.data[index].kompi_nama} ${response.data[index].batalyon_nama}</div>
+        verifikasi()
+        getKadets().then(x => {
+            setKadets(x)
+            if (x) {
+                var stringKadets = ``
+                for (let index = 0; index < x.length; index++) {
+                    stringKadets += `<a href='/personil/kadet?nim=${x[index].kadet_nim}' class='btn btn-dark rounded-0 d-flex text-start p-0 py-2 row text-decoration-none text-white'>
+                                                <div class='col-2 d-none d-lg-block'>${x[index].kadet_nim}</div>
+                                                <div class='col-5 col-lg-3'>${x[index].kadet_nama}</div>
+                                                <div class='col-2 col-lg-1'>${x[index].jenis_kelamin}</div>
+                                                <div class='col-4 d-none d-lg-block'>${x[index].pleton_nama} ${x[index].kompi_nama} ${x[index].batalyon_nama}</div>
                                                 <div class='col-4 col-lg-2'>
-                                                    <div class='rounded-2 px-2' style='background-color:${keterangan_color[response.data[index].keterangan_nama]}'>${response.data[index].keterangan_nama}</div>
+                                                    <div class='rounded-2 px-2' style='background-color:${keterangan_color[x[index].keterangan_nama]}'>${x[index].keterangan_nama}</div>
                                                 </div>
                                             </a>`
-                        }
-                        document.getElementById('kadets').innerHTML = stringKadets
-                    } else {
-                        document.getElementById('kadets').innerHTML = 'Tidak ada data'
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                });
-        }
-        verifikasi()
-        getKadets()
+                }
+                document.getElementById('kadets').innerHTML = stringKadets
+            } else {
+                document.getElementById('kadets').innerHTML = 'Tidak ada data'
+            }
+        })
         document.getElementById('btn-dashboard').classList.remove('sidebar-active')
         document.getElementById('btn-jabatan').classList.remove('sidebar-active')
         document.getElementById('btn-kelolaAkun').classList.remove('sidebar-active')
-        document.getElementById('btn-dataKadet').classList.add('sidebar-active')
+        document.getElementById('btn-personil').classList.add('sidebar-active')
         document.getElementById('sidebar-username').classList.add('btn-dark')
         document.getElementById('sidebar-username').classList.remove('btn-secondary')
 
         document.getElementById('nav-btn-dashboard').classList.remove('sidebar-active')
         document.getElementById('nav-btn-jabatan').classList.remove('sidebar-active')
         document.getElementById('nav-btn-kelolaAkun').classList.remove('sidebar-active')
-        document.getElementById('nav-btn-dataKadet').classList.add('sidebar-active')
+        document.getElementById('nav-btn-personil').classList.add('sidebar-active')
         document.getElementById('navbar-username').classList.add('btn-dark')
         document.getElementById('navbar-username').classList.remove('btn-secondary')
 
     }, [])
 
-    function sleep(ms) {
-        return new Promise(
-            resolve => setTimeout(resolve, ms)
-        );
-    }
-
     const changeFind = () => {
         var find = document.getElementById('findKadet').value.toLowerCase();
-        console.log(find)
+
         var stringRecent = ""
         for (let index = 0; index < kadets.length; index++) {
-            if (kadets[index].kadet_nama.toLowerCase().includes(find)) {
+            var pleton = `${kadets[index].pleton_nama} ${kadets[index].kompi_nama} ${kadets[index].batalyon_nama}`
+            if (kadets[index].kadet_nama.toLowerCase().includes(find) || pleton.toLocaleLowerCase().includes(find)) {
                 stringRecent +=
-                    `<a href='/dataKadet/kadet/?nim=${kadets[index].kadet_nim}' class='btn btn-dark rounded-0 d-flex text-start p-0 py-2 row text-decoration-none text-white'>
+                    `<a href='/personil/kadet/?nim=${kadets[index].kadet_nim}' class='btn btn-dark rounded-0 d-flex text-start p-0 py-2 row text-decoration-none text-white'>
                         <div class='col-2 d-none d-lg-block'>${kadets[index].kadet_nim}</div>
                         <div class='col-5 col-lg-3'>${kadets[index].kadet_nama}</div>
                         <div class='col-2 col-lg-1'>${kadets[index].jenis_kelamin}</div>
@@ -139,8 +87,11 @@ export const DataKadet = () => {
             }
 
         }
-        document.getElementById('kadets').innerHTML = stringRecent
-
+        if (stringRecent == "") {
+            document.getElementById('kadets').innerHTML = "<span>Tidak ada data yang sesuai<span>"
+        } else {
+            document.getElementById('kadets').innerHTML = stringRecent
+        }
     }
 
     return (
@@ -149,18 +100,9 @@ export const DataKadet = () => {
             <div className='d-flex'>
                 <Sidebar />
                 <div className='w-100'>
-                    <div className='fs-1 fw-medium text-light font-poppins p-1 pt-md-3 ps-3'>
-                        <span>Data Kadet</span>
-                    </div>
+                    {heading2("Personil")}
                     <div className='p-2 p-md-3 d-flex flex-wrap font-nunito'>
-                        <div className='p-1 p-lg-2 pb-3 col-12 col-lg-6 rounded-3 d-flex flex-wrap'>
-                            <div className='card rounded-4 bg-dark shadow-lg text-light w-100 col-12'>
-                                <h2 className='p-3'>
-                                    <span id='tanggal'></span><br />
-                                    <span id='waktu'></span>
-                                </h2>
-                            </div>
-                        </div>
+                        <TimeInterval />
                         <div className='p-1 p-lg-2 pb-3 col-12 col-lg-6 rounded-3 d-flex flex-wrap'>
                             <div className='card rounded-4 bg-dark shadow-lg text-light w-100 col-12'>
                                 <h4 className='card-header d-flex border-bottom'>...

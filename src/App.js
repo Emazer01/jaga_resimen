@@ -11,14 +11,13 @@ import {BrowserRouter,Routes, Route} from 'react-router-dom';
 //importing pages
 import { Dashboard } from './pages/Dashboard';
 import { Login } from './pages/Login';
-import { Register } from './pages/Register';
 import { KelolaAkun } from './pages/KelolaAkun';
 import { Jabatan } from './pages/Jabatan';
-import { DataKadet } from './pages/DataKadet';
 import { Kadet } from './pages/Kadet';
 import { User } from './pages/User';
 import { NotFound } from './pages/NotFound';
 import { Forbidden } from './pages/Forbidden';
+import { Personil } from './pages/Personil';
 
 function App() {
   return (
@@ -26,11 +25,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/register" element={<Register />}></Route>
         <Route path="/kelola" element={<KelolaAkun />}></Route>
-        <Route path="/dataKadet" element={<DataKadet />}></Route>
+        <Route path="/personil" element={<Personil />}></Route>
         <Route path="/user" element={<User />}></Route>
-        <Route path="/dataKadet/kadet" element={<Kadet />}></Route>
+        <Route path="/personil/kadet" element={<Kadet />}></Route>
         <Route path="/jabatan" element={<Jabatan />}></Route>
         <Route path="/forbidden" element={<Forbidden />}></Route>
         <Route path="*" element={<NotFound />}></Route>

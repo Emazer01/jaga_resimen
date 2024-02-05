@@ -42,10 +42,15 @@
 }
 
 .sidebar-active {
-  background-color: #74580f;
+  border-right: 8px solid #74580f;
+  background-color: #505050;
+}
+.sidebar-link{
+  transition: 0.2s;
 }
 .sidebar-link:hover{
-  background-color: #84681f;
+  border-right: 8px solid #74580f;
+  background-color: #505050;
 }
 
 .color-menkor{
