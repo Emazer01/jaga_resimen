@@ -26,9 +26,15 @@ const verifikasi = async() => {
                 if (response.data.role_id != 1) {
                     document.getElementById("btn-kelolaAkun").classList.add('d-none')
                     document.getElementById("btn-jabatan").classList.add('d-none')
+                    document.getElementById("btn-dinas").classList.add('d-none')
 
                     document.getElementById("nav-btn-kelolaAkun").classList.add('d-none')
                     document.getElementById("nav-btn-jabatan").classList.add('d-none')
+                    document.getElementById("nav-btn-dinas").classList.add('d-none')
+                }
+                if (response.data.role_id != 2) {
+                    document.getElementById("btn-laporan").classList.add('d-none')
+                    document.getElementById("nav-btn-laporan").classList.add('d-none')
                 }
                 document.getElementById('isi-navbar-username').innerHTML = response.data.username
                 document.getElementById('isi-sidebar-username').innerHTML = response.data.username

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Sidebar } from '../component/Sidebar';
 import { Navbar } from '../component/Navbar';
-import { heading2 } from '../component/Minor';
+import { Heading } from '../component/Minor';
 import { verifikasi } from '../function/Verifikasi';
 import { getAttribut, myKadet } from '../function/Get';
 import { handleChangeFoto } from '../function/Change';
 import { handleChangePassword, handleEditKadet } from '../function/Put';
+import { ModalFormEditKadet, ModalFormPassword } from '../component/Modal';
 
 export const User = () => {
     document.title = 'Profile - Pusat Informasi Resimen Korps Kadet'
@@ -55,6 +56,9 @@ export const User = () => {
         url: `data:image/jpeg;base64,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`
     })
 
+    const [pleton, setPleton] = React.useState([])
+    const [pangkat, setPangkat] = React.useState([])
+
     React.useEffect(() => {
         verifikasi().then(x => {
             console.log(x.role)
@@ -66,60 +70,51 @@ export const User = () => {
         getAttribut().then(x => {
             setAtribut(x)
             if (x) {
-                var stringPleton = ``
+                var stringPleton = []
                 for (let index = 0; index < x.pleton.length; index++) {
-                    stringPleton += `<option id='pleton${x.pleton[index].pleton_id}' value=${x.pleton[index].pleton_id}>${x.pleton[index].pleton_nama} ${x.pleton[index].kompi_nama} ${x.pleton[index].batalyon_nama}</option>`
+                    stringPleton.push({
+                        pleton_id: x.pleton[index].pleton_id,
+                        pleton_nama: `${x.pleton[index].pleton_nama} ${x.pleton[index].kompi_nama} ${x.pleton[index].batalyon_nama}`
+
+                    })
                 }
-                document.getElementById('input-pleton').innerHTML = stringPleton
-                var stringPangkat = ``
+                setPleton(stringPleton)
+                var stringPangkat = []
                 for (let index = 0; index < x.pangkat.length; index++) {
-                    stringPangkat += `<option value=${x.pangkat[index].pangkat_id}>${x.pangkat[index].pangkat_nama}</option>`
+                    stringPangkat.push({
+                        pangkat_id: x.pangkat[index].pangkat_id,
+                        pangkat_nama: x.pangkat[index].pangkat_nama
+                    })
                 }
-                document.getElementById('input-pangkat').innerHTML = stringPangkat
+                setPangkat(stringPangkat)
             }
         })
         myKadet().then(x => {
             if (x) {
                 setKadet(x)
                 setFoto({ url: x.foto_isi })
-                document.getElementById('input-pangkat').value = x.pangkat_id
-                document.getElementById(`input-pleton`).value = x.pleton_id
-                document.getElementById('input-jk').value = x.jenis_kelamin
             }
         })
         document.getElementById('btn-dashboard').classList.remove('sidebar-active')
-        document.getElementById('btn-jabatan').classList.remove('sidebar-active')
-        document.getElementById('btn-kelolaAkun').classList.remove('sidebar-active')
-        document.getElementById('btn-personil').classList.remove('sidebar-active')
         document.getElementById('sidebar-username').classList.remove('btn-dark')
         document.getElementById('sidebar-username').classList.add('btn-secondary')
 
         document.getElementById('nav-btn-dashboard').classList.remove('sidebar-active')
-        document.getElementById('nav-btn-jabatan').classList.remove('sidebar-active')
-        document.getElementById('nav-btn-kelolaAkun').classList.remove('sidebar-active')
-        document.getElementById('nav-btn-personil').classList.remove('sidebar-active')
         document.getElementById('navbar-username').classList.remove('btn-dark')
         document.getElementById('navbar-username').classList.add('btn-secondary')
 
     }, [])
 
-    const changeFoto = async (e) => {
-        let selectedFile = e.target.files[0]
-        await handleChangeFoto(selectedFile).then(x=>{
-            setFoto(x)
-        })
-    }
-
     return (
-        <div className='bg-dark bg-gradient' style={{ minHeight: "100vh" }}>
+        <div style={{ minHeight: "100vh", backgroundColor: '#f0f0f0' }}>
             <Navbar />
             <div className='d-flex'>
                 <Sidebar />
                 <div className='w-100'>
-                    {heading2("Profile")}
+                    <Heading query={'Dashboard'} />
                     <div className='p-2 p-md-3 d-flex flex-wrap font-nunito'>
                         <div className='p-1 p-lg-2 pb-3 col-12 col-lg-6 rounded-3 d-flex flex-wrap'>
-                            <div className='card rounded-4 bg-dark shadow-lg text-light w-100 col-12'>
+                            <div className='card shadow w-100'>
                                 <h4 className='card-header d-flex border-bottom'>Akun
                                     <i class="fs-2 ms-auto bi bi-person-circle"></i>
                                 </h4>
@@ -140,7 +135,7 @@ export const User = () => {
                             </div>
                         </div>
                         <div className='p-1 p-lg-2 pb-3 col-12 col-lg-6 rounded-3 d-flex flex-wrap'>
-                            <div className='card rounded-4 bg-dark shadow-lg text-light w-100 col-12'>
+                            <div className='card shadow w-100'>
                                 <h4 className='card-header d-flex border-bottom'>...
                                     <i class="fs-2 ms-auto bi bi-person-fill-add"></i>
                                 </h4>
@@ -150,19 +145,19 @@ export const User = () => {
                             </div>
                         </div>
                         <div className='p-1 p-lg-2 pb-3 col-12 d-flex flex-wrap' id='data-diri'>
-                            <div className='card rounded-4 bg-dark shadow-lg w-100 text-light'>
+                            <div className='card shadow w-100'>
                                 <h4 className='card-header d-flex border-bottom'>Data Diri
                                     <i class="fs-2 bi bi-person-vcard-fill ms-auto"></i>
                                 </h4>
                                 <div className='card-body d-flex align-item-center px-4'>
-                                    <div className='d-flex flex-wrap'>
+                                    <div className='d-flex flex-wrap w-100'>
                                         <div className='col-12 col-lg-3'>
                                             <div className='p-1 '>
                                                 <img src={kadet.foto_isi} className="rounded-4 w-100" />
                                             </div>
                                         </div>
-                                        <div className='col-12 col-lg-9 px-1 px-lg-3'>
-                                            <table className='fs-4 w-100 table table-dark'>
+                                        <div className='col-12 col-lg-9 px-lg-3 table-responsive d-flex align-items-center'>
+                                            <table className='fs-5 table table-striped'>
                                                 <tbody>
                                                     <tr>
                                                         <th className='align-top'>Nama</th>
@@ -175,6 +170,10 @@ export const User = () => {
                                                     <tr>
                                                         <th className='align-top'>Jenis Kelamin</th>
                                                         <td className='ps-3'>{jk[kadet.jenis_kelamin]}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th className='align-top'>Tahun Masuk</th>
+                                                        <td className='ps-3'>{kadet.angkatan}</td>
                                                     </tr>
                                                     <tr>
                                                         <th className='align-top'>Pangkat</th>
@@ -201,140 +200,14 @@ export const User = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <button className='card-footer btn btn-dark rounded-bottom-4 border-none border-top text-end p-1' data-bs-toggle="modal" data-bs-target="#staticBackdropKadet"><small>Edit Data Diri<i class="ms-2 bi bi-box-arrow-up-right"></i></small></button>
+                                <button className='card-footer btn rounded-bottom-4 border-none border-top text-end p-1' data-bs-toggle="modal" data-bs-target="#staticBackdropKadet"><small>Edit Data Diri<i class="ms-2 bi bi-box-arrow-up-right"></i></small></button>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <div class="modal fade" id="staticBackdropPassword" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content bg-dark text-white">
-                        <form onSubmit={handleChangePassword}>
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Change Password</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body px-lg-4">
-                                <div className='py-1'>
-                                    <div class="mb-2">
-                                        <label for="exampleFormControlInput1" class="form-label">Old Password<span className="text-danger">*</span></label>
-                                        <input type="password" class="form-control" id="input-oldpassword" name='input-oldpassword' placeholder="old password" />
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="exampleFormControlInput1" class="form-label">New Password<span className="text-danger">*</span></label>
-                                        <input type="password" class="form-control" id="input-newpassword" name='input-newpassword' placeholder="new password" />
-                                        <small>(min 8 char, must include Uppercase & Number/Symbol)</small>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="exampleFormControlInput1" class="form-label">Confirm New Password<span className="text-danger">*</span></label>
-                                        <input type="password" class="form-control" id="input-confirmnewpassword" name='input-confirmnewpassword' placeholder="confirm new password" />
-                                    </div>
-                                    <div className='text-center d-none' id='change-password-loading'>
-                                        <div class="spinner-border" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                    </div>
-                                    <div class="alert p-2 bg-danger d-none" id='change-password-danger' role="alert">
-                                        <strong>Gagal menyimpan!</strong>
-                                        <span className='ps-2' id='login-danger-message'>periksa kembali data yang dimasukkan</span>
-                                    </div>
-                                    <div class="alert p-2 bg-success d-none" id='change-password-success' role="alert">
-                                        <strong>Berhasil menyimpan!</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                                <button type="submit" class="btn btn-primary px-4">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="staticBackdropKadet" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content bg-dark text-white">
-                        <form onSubmit={(e)=>{handleEditKadet(e,foto)}}>
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Data Diri</h1>
-                                <button type="button" onClick={() => {
-                                    setFoto({ url: kadet.foto_isi })
-                                    document.getElementById('input-pangkat').value = kadet.pangkat_id
-                                    document.getElementById('input-pleton').value = kadet.pleton_id
-                                    document.getElementById('input-jk').value = kadet.jenis_kelamin
-                                    document.getElementById('input-nama').value = document.getElementById('input-nama').defaultValue
-                                    document.getElementById('input-nim').value = document.getElementById('input-nim').defaultValue
-                                }} class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body px-lg-4">
-                                <div className='py-1'>
-                                    <div className='row'>
-                                        <div className='col-12 col-lg-4'>
-                                            <div className='p-1 px-5 p-lg-3'>
-                                                <img src={foto.url} className="rounded-4 w-100" />
-                                            </div>
-                                            <div class="mb-2">
-                                                <label for="exampleFormControlInput1" class="form-label">Pilih Foto</label>
-                                                <input onChange={changeFoto} type="file" accept="image/*" id="foto" name='foto' class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div className='col-12 col-lg-8'>
-                                            <div class="mb-2">
-                                                <label for="exampleFormControlInput1" class="form-label">Nama Lengkap<span className="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="input-nama" name='input-nama' placeholder="nama lengkap" defaultValue={kadet.kadet_nama} />
-                                            </div>
-                                            <div class="mb-2">
-                                                <label for="exampleFormControlInput1" class="form-label">NIM<span className="text-danger">*</span></label>
-                                                <input type="number" class="form-control" id="input-nim" name='input-nim' placeholder="nim" defaultValue={kadet.kadet_nim} />
-                                            </div>
-                                            <div class="mb-2">
-                                                <label for="exampleFormControlInput1" class="form-label">Jenis Kelamin<span className="text-danger">*</span></label>
-                                                <select class="form-select" aria-label="Default select example" id="input-jk" name='input-jk'>
-                                                    <option value='L'>Laki-laki</option>
-                                                    <option value='P'>Perempuan</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-2">
-                                                <label for="exampleFormControlInput1" class="form-label">Pangkat<span className="text-danger">*</span></label>
-                                                <select class="form-select" aria-label="Default select example" id="input-pangkat" name='input-pangkat'></select>
-                                            </div>
-                                            <div class="mb-2">
-                                                <label for="exampleFormControlInput1" class="form-label">Pleton<span className="text-danger">*</span></label>
-                                                <select class="form-select" aria-label="Default select example" id="input-pleton" name='input-pleton'></select>
-                                            </div>
-                                            <div className='text-center d-none' id='edit-kadet-loading'>
-                                                <div class="spinner-border" role="status">
-                                                    <span class="visually-hidden">Loading...</span>
-                                                </div>
-                                            </div>
-                                            <div class="alert p-2 bg-danger d-none" id='edit-kadet-danger' role="alert">
-                                                <strong>Gagal menyimpan!</strong>
-                                                <span className='ps-2' id='login-danger-message'>periksa kembali data yang dimasukkan</span>
-                                            </div>
-                                            <div class="alert p-2 bg-success d-none" id='edit-kadet-success' role="alert">
-                                                <strong>Berhasil menyimpan!</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" onClick={() => {
-                                    setFoto({ url: kadet.foto_isi })
-                                    document.getElementById('input-pangkat').value = kadet.pangkat_id
-                                    document.getElementById('input-pleton').value = kadet.pleton_id
-                                    document.getElementById('input-jk').value = kadet.jenis_kelamin
-                                    document.getElementById('input-nama').value = document.getElementById('input-nama').defaultValue
-                                    document.getElementById('input-nim').value = document.getElementById('input-nim').defaultValue
-                                }} class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                                <button type="submit" class="btn btn-primary px-4">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <ModalFormPassword />
+            <ModalFormEditKadet pleton={pleton} pangkat={pangkat} kadet={kadet} foto={foto} setFoto={setFoto} />
         </div>
     )
 }

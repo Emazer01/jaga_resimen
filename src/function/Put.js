@@ -53,13 +53,6 @@ const handleEditKadet = async (event,foto) => {
     document.getElementById("edit-kadet-loading").classList.remove('d-none')
     const data = new FormData(event.currentTarget);
     const fotoUrl = foto.url
-    console.log({
-        nama: data.get('input-nama'),
-        nim: data.get('input-nim'),
-        pangkat: data.get('input-pangkat'),
-        pleton: data.get('input-pleton'),
-        fotoUrl: fotoUrl
-    })
     if (data.get('input-nama') == "" || data.get('input-nim') == "" || data.get('input-pangkat') == "" || data.get('input-pleton') == "") {
         console.log("blm kirim")
         document.getElementById("edit-kadet-loading").classList.add('d-none')
@@ -74,7 +67,8 @@ const handleEditKadet = async (event,foto) => {
                 jk: data.get('input-jk'),
                 pangkat: data.get('input-pangkat'),
                 pleton: data.get('input-pleton'),
-                fotoUrl: fotoUrl
+                fotoUrl: fotoUrl,
+                angkatan: data.get('input-angkatan')
             },
             {
                 headers: {
@@ -111,11 +105,51 @@ const handleEditKadet = async (event,foto) => {
 const handleAssignJabatan = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get('input-assign-tingkat'), data.get('input-assign-jabatan'), data.get('input-assign-pejabat'))
+    console.log(document.getElementById('input-assign-tingkat').value, document.getElementById('input-assign-jabatan').value, data.get('input-assign-pejabat'))
     await axios.put(`${process.env.REACT_APP_BACKEND_URL}/assignJabatan`,
         {
-            tingkat: data.get('input-assign-tingkat'),
-            jabatan_id: data.get('input-assign-jabatan'),
+            tingkat: document.getElementById('input-assign-tingkat').value,
+            jabatan_id: document.getElementById('input-assign-jabatan').value,
+            kadet_id: data.get('input-assign-pejabat')
+        },
+        {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            }
+        }
+    )
+        .then(async function (response) {
+            if (response.status == 200) {
+                document.getElementById("assign-jabatan-loading").classList.add('d-none')
+                document.getElementById("assign-jabatan-success").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("assign-jabatan-success").classList.add('d-none')
+                window.location.reload()
+            } else {
+                console.log("udah kirim")
+                document.getElementById("assign-jabatan-loading").classList.add('d-none')
+                document.getElementById("assign-jabatan-danger").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("assign-jabatan-danger").classList.add('d-none')
+            }
+        })
+        .catch(async function (error) {
+            console.log("error kirim")
+            document.getElementById("assign-jabatan-loading").classList.add('d-none')
+            document.getElementById("assign-jabatan-danger").classList.remove('d-none')
+            await sleep(1500)
+            document.getElementById("assign-jabatan-danger").classList.add('d-none')
+        });
+}
+
+const handleAssignDinas = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log(document.getElementById('input-assign-tingkat').value, document.getElementById('input-assign-jabatan').value, data.get('input-assign-pejabat'))
+    await axios.put(`${process.env.REACT_APP_BACKEND_URL}/assignDinas`,
+        {
+            tingkat: document.getElementById('input-assign-tingkat').value,
+            dinas_id: document.getElementById('input-assign-jabatan').value,
             kadet_id: data.get('input-assign-pejabat')
         },
         {
@@ -151,5 +185,6 @@ const handleAssignJabatan = async (event) => {
 export {
     handleChangePassword,
     handleEditKadet,
-    handleAssignJabatan
+    handleAssignJabatan,
+    handleAssignDinas
 };

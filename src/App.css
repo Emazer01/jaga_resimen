@@ -71,3 +71,46 @@
 .font-poppins{
   font-family: 'Poppins', sans-serif;
 }
+
+:root {
+  --white: #fff;
+  --darkblue: #ffffff;
+}
+
+.table-clickable {
+  text-align: left;
+  border-collapse: collapse;
+}
+
+.table-clickable tbody a {
+  display: block;
+  text-decoration: none;
+  transition: all 0.25s ease-out;
+}
+
+.table-clickable tbody tr:hover a {
+  color: var(--white);
+  background: var(--darkblue);
+}
+
+.page-link {
+  color: white;
+}
+
+.form-check-input:checked{
+  background-color: #74580f !important;
+  border: 0;
+}
+.form-check-input:focus, .form-control:focus, .form-select:focus, .label::after, label.form-check-label:focus, .form-check-input::after, .form-check-input:not(:disabled):not(.disabled):active:focus {
+  outline: 0;
+  border: 0;
+  box-shadow: 0 0 0 0.15rem #00000010 !important;
+}
+
+.timeline-circle{
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+  top: calc(50% - 8px);
+  left: -10px;
+}

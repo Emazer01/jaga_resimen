@@ -99,7 +99,7 @@ const handleTambahPengasuh = async (event) => {
     }
 }
 
-const handleTambahKadet = async (event,foto) => {
+const handleTambahKadet = async (event, foto) => {
     event.preventDefault();
     document.getElementById("tambah-kadet-loading").classList.remove('d-none')
     const data = new FormData(event.currentTarget);
@@ -121,6 +121,7 @@ const handleTambahKadet = async (event,foto) => {
                 jk: data.get('input-jk'),
                 pleton: data.get('input-pleton'),
                 fotoUrl: fotoUrl,
+                angkatan: data.get('input-angkatan')
             },
             {
                 headers: {
@@ -144,6 +145,7 @@ const handleTambahKadet = async (event,foto) => {
                 }
             })
             .catch(async function (error) {
+                console.log(error)
                 console.log("error kirim")
                 document.getElementById("tambah-kadet-loading").classList.add('d-none')
                 document.getElementById("tambah-kadet-danger").classList.remove('d-none')
@@ -153,7 +155,7 @@ const handleTambahKadet = async (event,foto) => {
     }
 }
 
-const handleTambahKadetBulk = async (event,foto,excel) => {
+const handleTambahKadetBulk = async (event, foto, excel) => {
     event.preventDefault();
     document.getElementById("tambah-kadetBulk-loading").classList.remove('d-none')
     for (let index = 0; index < excel.length; index++) {
@@ -171,7 +173,8 @@ const handleTambahKadetBulk = async (event,foto,excel) => {
                     pangkat: excel[index].pangkat_id,
                     jk: excel[index].jk,
                     pleton: excel[index].pleton_id,
-                    fotoUrl: foto.url
+                    fotoUrl: foto.url,
+                    angkatan: excel[index].angkatan
                 },
                 {
                     headers: {
@@ -194,7 +197,7 @@ const handleTambahKadetBulk = async (event,foto,excel) => {
 
     }
     document.getElementById("tambah-kadetBulk-loading").classList.add('d-none')
-    window.location.reload();
+    //window.location.reload()
 }
 
 const handleTambahJabatan = async (event) => {
@@ -307,6 +310,126 @@ const handleLogin = async (event) => {
         });
 }
 
+const handleLapApel = async (event, kadets) => {
+    event.preventDefault();
+    document.getElementById("lap-apel-loading").classList.remove("d-none")
+    const data = new FormData(event.currentTarget);
+    var listKet = []
+    for (let index = 0; index < kadets.length; index++) {
+        if (data.get(`keterangan_id-${kadets[index].kadet_id}`) == 2) {
+            listKet.push({
+                kadet_id: data.get(`kadet_id-${kadets[index].kadet_id}`),
+                keterangan_id: data.get(`keterangan_id-${kadets[index].kadet_id}`),
+                sakit: data.get(`sakit-${kadets[index].kadet_id}`),
+                detail_sakit: data.get(`detail-sakit-${kadets[index].kadet_id}`),
+                foto_sakit: document.getElementById(`display-foto-sakit-${kadets[index].kadet_id}`).src
+            })
+        } else if (data.get(`keterangan_id-${kadets[index].kadet_id}`) == 3) {
+            listKet.push({
+                kadet_id: data.get(`kadet_id-${kadets[index].kadet_id}`),
+                keterangan_id: data.get(`keterangan_id-${kadets[index].kadet_id}`),
+                izin: data.get(`izin-${kadets[index].kadet_id}`),
+                detail_izin: data.get(`detail-izin-${kadets[index].kadet_id}`),
+                foto_izin: document.getElementById(`display-foto-izin-${kadets[index].kadet_id}`).src
+            })
+        } else {
+            listKet.push({
+                kadet_id: data.get(`kadet_id-${kadets[index].kadet_id}`),
+                keterangan_id: data.get(`keterangan_id-${kadets[index].kadet_id}`)
+            })
+        }
+    }
+    console.log({
+        jenis_apel: data.get('jenis-apel'),
+        pleton_id: data.get('input-pleton-id'),
+        data: listKet
+    })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/dataApel`,
+        {
+            jenis_apel: data.get('jenis-apel'),
+            pleton_id: data.get('input-pleton-id'),
+            data: listKet
+        },
+        {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            }
+        }
+    )
+        .then(async function (response) {
+            console.log(response)
+            if (response.status == 200) {
+                document.getElementById("lap-apel-loading").classList.add('d-none')
+                document.getElementById("lap-apel-success").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("lap-apel-success").classList.add('d-none')
+                window.location.reload()
+            } else {
+                console.log("udah kirim")
+                document.getElementById("lap-apel-loading").classList.add('d-none')
+                document.getElementById("lap-apel-danger").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("lap-apel-danger").classList.add('d-none')
+            }
+        })
+        .catch(async function (error) {
+            console.log("error kirim")
+            document.getElementById("lap-apel-loading").classList.add('d-none')
+            document.getElementById("lap-apel-danger").classList.remove('d-none')
+            await sleep(1500)
+            document.getElementById("lap-apel-danger").classList.add('d-none')
+        });
+}
+
+const handleForwardApel = async (event, tingkat, subordinates) => {
+    event.preventDefault();
+    document.getElementById("forward-apel-loading").classList.remove("d-none")
+    const data = new FormData(event.currentTarget);
+    var lap_id = []
+    for (let index = 0; index < subordinates.length; index++) {
+        //console.log(`subordinates-apel-${subordinates[index].subordinates_id}`)
+        lap_id.push(data.get(`subordinates-apel-${subordinates[index].subordinates_id}`))
+    }
+    console.log({
+        jenis_apel: data.get('jenis-apel'),
+        subordinates_lap_id: lap_id
+    })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/lapApel`,
+        {
+            jenis_apel: data.get('jenis-apel'),
+            subordinates_lap_id: lap_id
+        },
+        {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            }
+        }
+    )
+        .then(async function (response) {
+            console.log(response)
+            if (response.status == 200) {
+                document.getElementById("forward-apel-loading").classList.add('d-none')
+                document.getElementById("forward-apel-success").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("forward-apel-success").classList.add('d-none')
+                window.location.reload()
+            } else {
+                console.log("udah kirim")
+                document.getElementById("forward-apel-loading").classList.add('d-none')
+                document.getElementById("forward-apel-danger").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("forward-apel-danger").classList.add('d-none')
+            }
+        })
+        .catch(async function (error) {
+            console.log("error kirim")
+            document.getElementById("forward-apel-loading").classList.add('d-none')
+            document.getElementById("forward-apel-danger").classList.remove('d-none')
+            await sleep(1500)
+            document.getElementById("forward-apel-danger").classList.add('d-none')
+        });
+}
+
 export {
     handleTambahAdmin,
     handleTambahPengasuh,
@@ -314,5 +437,7 @@ export {
     handleTambahKadetBulk,
     handleTambahJabatan,
     handleTambahDD,
-    handleLogin
+    handleLogin,
+    handleLapApel,
+    handleForwardApel
 };

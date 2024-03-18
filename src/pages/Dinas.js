@@ -3,11 +3,11 @@ import { Sidebar } from '../component/Sidebar';
 import { Navbar } from '../component/Navbar';
 import { verifikasi } from '../function/Verifikasi';
 import { Heading, Pagination, TimeInterval } from '../component/Minor';
-import { getAttribut, getJabatans, getKadets } from '../function/Get';
-import { ModalFormAssignMenkorps, ModalFormTambahJabatan, ModalStrukturMenkorps } from '../component/Modal';
+import { getAttribut, getDds, getJabatans, getKadets } from '../function/Get';
+import { ModalFormAssignDinas, ModalFormAssignMenkorps, ModalFormEditJabatan, ModalFormTambahDD, ModalFormTambahJabatan, ModalStrukturMenkorps } from '../component/Modal';
 
-export const Jabatan = () => {
-    document.title = 'Kelola Jabatan - Pusat Informasi Resimen Korps Kadet'
+export const Dinas = () => {
+    document.title = 'Kelola Dinas - Pusat Informasi Resimen Korps Kadet'
 
     const [atribut, setAtribut] = React.useState({
         pangkat: {}, pleton: {}
@@ -15,10 +15,10 @@ export const Jabatan = () => {
 
     const [kadets, setKadets] = React.useState([])
 
-    const [jabatans, setJabatans] = React.useState([])
-    const [jabatansSelect, setJabatansSelect] = React.useState([])
+    const [dds, setDds] = React.useState([])
+    const [ddsSelect, setDdsSelect] = React.useState([])
 
-    const [currentJabatan, setCurrentJabatan] = React.useState({})
+    const [currentDds, setCurrentDds] = React.useState({})
 
     const [currentPage, setCurrentPage] = React.useState(1)
     const [postPerPage, setPostPerPage] = React.useState(10)
@@ -79,9 +79,9 @@ export const Jabatan = () => {
                 })
             }
         })
-        getJabatans().then(x => {
-            setJabatans(x)
-            setJabatansSelect(x)
+        getDds().then(x => {
+            setDds(x)
+            setDdsSelect(x)
             console.log(x[0])
         })
         getKadets().then(x => {
@@ -89,31 +89,32 @@ export const Jabatan = () => {
         })
 
         document.getElementById('btn-dashboard').classList.remove('sidebar-active')
-        document.getElementById('btn-jabatan').classList.add('sidebar-active')
-
+        document.getElementById('btn-dinas').classList.add('sidebar-active')
+        
         document.getElementById('nav-btn-dashboard').classList.remove('sidebar-active')
-        document.getElementById('nav-btn-jabatan').classList.add('sidebar-active')
+        document.getElementById('nav-btn-dinas').classList.add('sidebar-active')
     }, [])
 
     const indexOfLastPost = currentPage * postPerPage;
     const indexOfFirstPost = indexOfLastPost - postPerPage;
-    const currentPosts = jabatansSelect.slice(indexOfFirstPost, indexOfLastPost)
+    const currentPosts = ddsSelect.slice(indexOfFirstPost, indexOfLastPost)
 
     const changePage = (number) => {
-        if (number >= 1 && number <= Math.ceil(jabatansSelect.length / postPerPage)) {
+        if (number >= 1 && number <= Math.ceil(ddsSelect.length / postPerPage)) {
             setCurrentPage(number)
         }
     }
 
     const changeFind = () => {
         var find = document.getElementById('findJabatan').value.toLowerCase();
+        console.log(find)
         var select = []
-        for (let index = 0; index < jabatans.length; index++) {
-            if (jabatans[index].jabatan_nama.toLowerCase().includes(find)) {
-                select.push(jabatans[index])
+        for (let index = 0; index < dds.length; index++) {
+            if (dds[index].dd_nama.toLowerCase().includes(find)) {
+                select.push(dds[index])
             }
         }
-        setJabatansSelect(select)
+        setDdsSelect(select)
         setCurrentPage(1)
     }
 
@@ -123,7 +124,7 @@ export const Jabatan = () => {
             <div className='d-flex'>
                 <Sidebar />
                 <div className='w-100'>
-                    <Heading query={'Kelola Jabatan'} />
+                    <Heading query={'Kelola Dinas'} />
                     <div className='d-flex flex-wrap p-2 font-nunito'>
                         <TimeInterval lgCol='6' />
                         <div className='p-1 p-lg-2 pb-3 col-12 col-lg-6 d-flex flex-wrap' id='actionAdmin'>
@@ -136,7 +137,7 @@ export const Jabatan = () => {
                                         <tbody>
                                             <tr>
                                                 <td className='p-1 p-lg-2 col-6'>
-                                                    <button className='btn btn-secondary w-100' data-bs-toggle="modal" data-bs-target="#staticBackdropMenkorps">Tambah Jabatan</button>
+                                                    <button className='btn btn-secondary w-100' data-bs-toggle="modal" data-bs-target="#staticBackdropDD">Tambah Dinas Dalam</button>
                                                 </td>
                                                 <td className='p-1 p-lg-2 col-6'>
                                                     <button className='btn btn-secondary w-100'>Struktur</button>
@@ -149,19 +150,19 @@ export const Jabatan = () => {
                         </div>
                         <div className='p-1 p-lg-2 pb-3 col-12'>
                             <div className='card shadow w-100'>
-                                <h4 className='card-header d-flex border-bottom'>Menkorps
+                                <h4 className='card-header d-flex border-bottom'>Dinas Dalam
                                     <i className="fs-2 bi bi-diagram-3-fill ms-auto"></i>
                                 </h4>
                                 <div className='card-body row align-item-center px-4 table-responsive'>
                                     <div className="input-group p-0 pb-3">
-                                        <span className="input-group-text">Cari jabatan</span>
+                                        <span className="input-group-text">Cari dinas</span>
                                         <input type="text" id='findJabatan' onChange={changeFind} className="form-control bg-putihdikit" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2" />
                                     </div>
                                     <div className='table-responsive'>
                                         <table className="table table-striped">
                                             <thead>
                                                 <tr className='border-bottom'>
-                                                    <th>Jabatan</th>
+                                                    <th>Dinas Dalam</th>
                                                     <th>Jenis</th>
                                                     <th>Tingkat</th>
                                                     <th>Status</th>
@@ -170,16 +171,16 @@ export const Jabatan = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {currentPosts.map(jabatan => {
-                                                    return (
-                                                        <tr key={jabatan.jabatan_nama}>
-                                                            <td>{jabatan.jabatan_nama}</td>
-                                                            <td>{jabatan.jenis}</td>
-                                                            <td>{jabatan.tingkat}</td>
-                                                            <td>{jabatan.status}</td>
-                                                            <td>{jabatan.pangkat} {jabatan.kadet_nama}</td>
+                                                {currentPosts.map(dinas => {
+                                                    return(
+                                                        <tr key={dinas.dd_nama}>
+                                                            <td>{dinas.dd_nama}</td>
+                                                            <td>{dinas.jenis}</td>
+                                                            <td>{dinas.tingkat}</td>
+                                                            <td>{dinas.status}</td>
+                                                            <td>{dinas.pangkat} {dinas.kadet_nama}</td>
                                                             <td className='p-0'>
-                                                                <button onClick={() => { setCurrentJabatan(jabatan) }} className='btn btn-secondary m-1' data-bs-toggle="modal" data-bs-target="#staticBackdropAssignMenkorps">Assign</button>
+                                                                <button onClick={() => { setCurrentDds(dinas) }} className='btn btn-secondary m-1' data-bs-toggle="modal" data-bs-target="#staticBackdropAssignDinas">Assign</button>
                                                                 <button className='btn btn-danger m-1'>Nonaktifkan</button>
                                                             </td>
                                                         </tr>
@@ -188,15 +189,15 @@ export const Jabatan = () => {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <Pagination postPerPage={postPerPage} totalPost={jabatansSelect.length} currentPage={currentPage} changePage={changePage} />
+                                    <Pagination postPerPage={postPerPage} totalPost={ddsSelect.length} currentPage={currentPage} changePage={changePage} />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <ModalFormTambahJabatan satuan={satuan} />
-            <ModalFormAssignMenkorps kadets={kadets} jabatan={currentJabatan} />
+            <ModalFormTambahDD satuan={satuan} />
+            <ModalFormAssignDinas kadets={kadets} dinas={currentDds}/>
         </div>
     )
 }
