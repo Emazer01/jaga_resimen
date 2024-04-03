@@ -197,7 +197,7 @@ const handleTambahKadetBulk = async (event, foto, excel) => {
 
     }
     document.getElementById("tambah-kadetBulk-loading").classList.add('d-none')
-    //window.location.reload()
+    window.location.reload()
 }
 
 const handleTambahJabatan = async (event) => {
@@ -381,23 +381,222 @@ const handleLapApel = async (event, kadets) => {
         });
 }
 
+const handleEditApel = async (event, dataApel, cek) => {
+    try {
+        event.preventDefault();
+        document.getElementById("edit-apel-loading").classList.remove("d-none")
+        const data = new FormData(event.currentTarget);
+        var kirim = {
+            cek: cek,
+            major: [],
+            minor: {
+                sakit: [],
+                izin: []
+            },
+            toDel: {
+                sakit: [],
+                izin: [],
+                foto: []
+            }
+        }
+        for (let index = 0; index < dataApel.length; index++) {
+            if (data.get(`keterangan_id-${dataApel[index].data_apel_id}`) != dataApel[index].keterangan_id) {
+                if (dataApel[index].keterangan_id == 2) {
+                    kirim.toDel.sakit.push(dataApel[index].sakit_id)
+                    kirim.toDel.foto.push(dataApel[index].sakit.foto_id)
+                } else if (dataApel[index].keterangan_id == 3) {
+                    kirim.toDel.izin.push(dataApel[index].izin_id)
+                    kirim.toDel.foto.push(dataApel[index].izin.foto_id)
+                }
+
+                if (data.get(`keterangan_id-${dataApel[index].data_apel_id}`) == 2) {
+                    if (document.getElementById(`display-foto-sakit-${dataApel[index].data_apel_id}`).src == "") {
+                        throw Error
+                    }
+                    kirim.major.push({
+                        data_apel_id: dataApel[index].data_apel_id,
+                        keterangan_id: data.get(`keterangan_id-${dataApel[index].data_apel_id}`),
+                        sakit: {
+                            kadet_id: dataApel[index].kadet_id,
+                            sakit_nama: data.get(`sakit-${dataApel[index].data_apel_id}`),
+                            sakit_detail: data.get(`detail-sakit-${dataApel[index].data_apel_id}`),
+                            foto: document.getElementById(`display-foto-sakit-${dataApel[index].data_apel_id}`).src
+                        }
+                    })
+                } else if (data.get(`keterangan_id-${dataApel[index].data_apel_id}`) == 3) {
+                    if (document.getElementById(`display-foto-izin-${dataApel[index].data_apel_id}`).src == "") {
+                        throw Error
+                    }
+                    kirim.major.push({
+                        data_apel_id: dataApel[index].data_apel_id,
+                        keterangan_id: data.get(`keterangan_id-${dataApel[index].data_apel_id}`),
+                        izin: {
+                            kadet_id: dataApel[index].kadet_id,
+                            izin_nama: data.get(`izin-${dataApel[index].data_apel_id}`),
+                            izin_detail: data.get(`detail-izin-${dataApel[index].data_apel_id}`),
+                            foto: document.getElementById(`display-foto-izin-${dataApel[index].data_apel_id}`).src
+                        }
+                    })
+                } else {
+                    kirim.major.push({
+                        data_apel_id: dataApel[index].data_apel_id,
+                        keterangan_id: data.get(`keterangan_id-${dataApel[index].data_apel_id}`),
+                    })
+                }
+            } else {
+                if (dataApel[index].keterangan_id == 2) {
+                    if (dataApel[index].sakit.sakit_nama != data.get(`sakit-${dataApel[index].data_apel_id}`) || dataApel[index].sakit.sakit_detail != data.get(`detail-sakit-${dataApel[index].data_apel_id}`) || dataApel[index].sakit.foto_isi != document.getElementById(`display-foto-sakit-${dataApel[index].data_apel_id}`).src) {
+                        if (document.getElementById(`display-foto-sakit-${dataApel[index].data_apel_id}`).src == "") {
+                            throw Error
+                        }
+                        kirim.minor.sakit.push({
+                            sakit_id: dataApel[index].sakit_id,
+                            sakit_nama: data.get(`sakit-${dataApel[index].data_apel_id}`),
+                            sakit_detail: data.get(`detail-sakit-${dataApel[index].data_apel_id}`),
+                            foto_id: dataApel[index].sakit.foto_id,
+                            foto: document.getElementById(`display-foto-sakit-${dataApel[index].data_apel_id}`).src
+                        })
+                    }
+                } else if (dataApel[index].keterangan_id == 3) {
+                    if (dataApel[index].izin.izin_nama != data.get(`izin-${dataApel[index].data_apel_id}`) || dataApel[index].izin.izin_detail != data.get(`detail-izin-${dataApel[index].data_apel_id}`) || dataApel[index].izin.foto_isi != document.getElementById(`display-foto-izin-${dataApel[index].data_apel_id}`).src) {
+                        if (document.getElementById(`display-foto-izin-${dataApel[index].data_apel_id}`).src == "") {
+                            throw Error
+                        }
+                        kirim.minor.izin.push({
+                            izin_id: dataApel[index].izin_id,
+                            izin_nama: data.get(`izin-${dataApel[index].data_apel_id}`),
+                            izin_detail: data.get(`detail-izin-${dataApel[index].data_apel_id}`),
+                            foto_id: dataApel[index].izin.foto_id,
+                            foto: document.getElementById(`display-foto-izin-${dataApel[index].data_apel_id}`).src
+                        })
+                    }
+                }
+
+            }
+        }
+        console.log(dataApel)
+        console.log('kirim', kirim)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/editApel`,
+            kirim,
+            {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+                }
+            }
+        )
+            .then(async function (response) {
+                console.log(response)
+                if (response.status == 200) {
+                    document.getElementById("edit-apel-loading").classList.add('d-none')
+                    document.getElementById("edit-apel-success").classList.remove('d-none')
+                    await sleep(1500)
+                    document.getElementById("edit-apel-success").classList.add('d-none')
+                    //window.location.reload()
+                } else {
+                    console.log("udah kirim")
+                    document.getElementById("edit-apel-loading").classList.add('d-none')
+                    document.getElementById("edit-apel-danger").classList.remove('d-none')
+                    await sleep(1500)
+                    document.getElementById("edit-apel-danger").classList.add('d-none')
+                }
+            })
+            .catch(async function (error) {
+                console.log("error kirim")
+                document.getElementById("edit-apel-loading").classList.add('d-none')
+                document.getElementById("edit-apel-danger").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("edit-apel-danger").classList.add('d-none')
+            });
+    } catch (error) {
+        console.log("throw an")
+        document.getElementById("edit-apel-loading").classList.add('d-none')
+        document.getElementById("edit-apel-danger").classList.remove('d-none')
+        await sleep(1500)
+        document.getElementById("edit-apel-danger").classList.add('d-none')
+    }
+}
+
 const handleForwardApel = async (event, tingkat, subordinates) => {
     event.preventDefault();
     document.getElementById("forward-apel-loading").classList.remove("d-none")
     const data = new FormData(event.currentTarget);
     var lap_id = []
-    for (let index = 0; index < subordinates.length; index++) {
-        //console.log(`subordinates-apel-${subordinates[index].subordinates_id}`)
-        lap_id.push(data.get(`subordinates-apel-${subordinates[index].subordinates_id}`))
-    }
-    console.log({
-        jenis_apel: data.get('jenis-apel'),
-        subordinates_lap_id: lap_id
-    })
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/lapApel`,
-        {
+    try {
+        for (let index = 0; index < subordinates.length; index++) {
+            if (data.get(`subordinates-apel-${subordinates[index].subordinates_id}`) == null) {
+                throw Error
+            }
+            //console.log(`subordinates-apel-${subordinates[index].subordinates_id}`)
+            lap_id.push(data.get(`subordinates-apel-${subordinates[index].subordinates_id}`))
+            console.log('habis push')
+        }
+        console.log({
             jenis_apel: data.get('jenis-apel'),
             subordinates_lap_id: lap_id
+        })
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/lapApel`,
+            {
+                jenis_apel: data.get('jenis-apel'),
+                subordinates_lap_id: lap_id
+            },
+            {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+                }
+            }
+        )
+            .then(async function (response) {
+                console.log(response)
+                if (response.status == 200) {
+                    document.getElementById("forward-apel-loading").classList.add('d-none')
+                    document.getElementById("forward-apel-success").classList.remove('d-none')
+                    await sleep(1500)
+                    document.getElementById("forward-apel-success").classList.add('d-none')
+                    window.location.reload()
+                } else {
+                    console.log("udah kirim")
+                    document.getElementById("forward-apel-loading").classList.add('d-none')
+                    document.getElementById("forward-apel-danger").classList.remove('d-none')
+                    await sleep(1500)
+                    document.getElementById("forward-apel-danger").classList.add('d-none')
+                }
+            })
+            .catch(async function (error) {
+                console.log("error kirim")
+                document.getElementById("forward-apel-loading").classList.add('d-none')
+                document.getElementById("forward-apel-danger").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("forward-apel-danger").classList.add('d-none')
+            });
+    } catch (error) {
+        console.log("kena throw error")
+        document.getElementById("forward-apel-loading").classList.add('d-none')
+        document.getElementById("forward-apel-danger").classList.remove('d-none')
+        await sleep(1500)
+        document.getElementById("forward-apel-danger").classList.add('d-none')
+    }
+
+}
+
+const handleLapGiat = async (event, kadets, foto) => {
+    event.preventDefault();
+    document.getElementById("lap-giat-loading").classList.remove("d-none")
+    const data = new FormData(event.currentTarget);
+    var kadet_id =
+        console.log({
+            nama_kegiatan: data.get('input-nama-giat'),
+            date_kegiatan: data.get('input-date-giat'),
+            detail_kegiatan: data.get('input-detail-giat'),
+            peserta: kadets,
+            foto: document.getElementById('dokumentasi').src
+        })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/lapGiat`,
+        {
+            nama_kegiatan: data.get('input-nama-giat'),
+            date_kegiatan: data.get('input-date-giat'),
+            detail_kegiatan: data.get('input-detail-giat'),
+            peserta: kadets,
+            foto: document.getElementById('dokumentasi').src
         },
         {
             headers: {
@@ -408,25 +607,25 @@ const handleForwardApel = async (event, tingkat, subordinates) => {
         .then(async function (response) {
             console.log(response)
             if (response.status == 200) {
-                document.getElementById("forward-apel-loading").classList.add('d-none')
-                document.getElementById("forward-apel-success").classList.remove('d-none')
+                document.getElementById("lap-giat-loading").classList.add('d-none')
+                document.getElementById("lap-giat-success").classList.remove('d-none')
                 await sleep(1500)
-                document.getElementById("forward-apel-success").classList.add('d-none')
+                document.getElementById("lap-giat-success").classList.add('d-none')
                 window.location.reload()
             } else {
                 console.log("udah kirim")
-                document.getElementById("forward-apel-loading").classList.add('d-none')
-                document.getElementById("forward-apel-danger").classList.remove('d-none')
+                document.getElementById("lap-giat-loading").classList.add('d-none')
+                document.getElementById("lap-giat-danger").classList.remove('d-none')
                 await sleep(1500)
-                document.getElementById("forward-apel-danger").classList.add('d-none')
+                document.getElementById("lap-giat-danger").classList.add('d-none')
             }
         })
         .catch(async function (error) {
             console.log("error kirim")
-            document.getElementById("forward-apel-loading").classList.add('d-none')
-            document.getElementById("forward-apel-danger").classList.remove('d-none')
+            document.getElementById("lap-giat-loading").classList.add('d-none')
+            document.getElementById("lap-giat-danger").classList.remove('d-none')
             await sleep(1500)
-            document.getElementById("forward-apel-danger").classList.add('d-none')
+            document.getElementById("lap-giat-danger").classList.add('d-none')
         });
 }
 
@@ -439,5 +638,7 @@ export {
     handleTambahDD,
     handleLogin,
     handleLapApel,
-    handleForwardApel
+    handleEditApel,
+    handleForwardApel,
+    handleLapGiat
 };

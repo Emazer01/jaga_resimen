@@ -4,12 +4,13 @@ import { Navbar } from '../component/Navbar';
 import { verifikasi } from '../function/Verifikasi';
 import { Heading, TimeInterval } from '../component/Minor';
 import { getListLapApel, getWewenang } from '../function/Get';
-import { ModalFormForwardApel, ModalFormLapApel } from '../component/Modal';
+import { ModalFormEditApel, ModalFormForwardApel, ModalFormLapApel } from '../component/Modal';
 
 export const LaporanPers = () => {
     document.title = 'Laporan Personil - Pusat Informasi Resimen Korps Kadet'
 
     const [jabatan, setJabatan] = React.useState({})
+    const [edit, setEdit] = React.useState({})
     const [kadets, setKadets] = React.useState([])
     const [pleton, setPleton] = React.useState({})
 
@@ -40,6 +41,18 @@ export const LaporanPers = () => {
         'resimen': 'd-none'
     }
 
+    const editable = {
+        'button-type': {
+            0: "btn-secondary",
+            1: "btn-primary"
+        },
+        'button-state': {
+            0: "d-none",
+            1: ""
+        }
+
+    }
+
     React.useEffect(() => {
         verifikasi().then(x => {
             if (x.role != 'Kadet') {
@@ -59,8 +72,12 @@ export const LaporanPers = () => {
         getListLapApel().then(x => {
             if (x.lap_apel) {
                 setLapApel(x.lap_apel)
+                setEdit({
+                    tingkat : x.lap_apel[0].tingkat,
+                    id : x.lap_apel[0].apel_id
+                })
             }
-            if (x.subordinates!=undefined) {
+            if (x.subordinates != undefined) {
                 setSubordinates(x.subordinates)
             }
         })
@@ -193,11 +210,10 @@ export const LaporanPers = () => {
                                             <div className='mt-2 position-relative'>
                                                 {lapApel.map(lapApel => {
                                                     var tanggal = new Date(lapApel.apel_date).toLocaleString('id-id', { weekday: "long", year: "numeric", month: "long", day: "numeric" })
-                                                    console.log(tanggal)
                                                     return (
                                                         <div key={lapApel.apel_id} className='border-5 border-dark p-1 ps-3 border-start position-relative'>
-                                                            <button className={`btn btn-primary rounded-0 w-100 text-start d-flex`} data-bs-toggle="collapse" data-bs-target={`#detail-${lapApel.apel_id}`} aria-expanded="true">
-                                                                <strong>{lapApel.jenis_apel_nama}</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span>{tanggal}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span className='ms-auto'>Nomor : #{lapApel.apel_id}</span>
+                                                            <button className={`btn ${editable['button-type'][lapApel.editable]} rounded-0 w-100 text-start d-flex`} data-bs-toggle="collapse" data-bs-target={`#detail-${lapApel.apel_id}`} aria-expanded="true">
+                                                                <strong className='me-2'>{lapApel.jenis_apel_nama}</strong><span className='me-2'>{tanggal}</span><span className='ms-auto'>#{jabatan.tingkat}-{lapApel.apel_id}</span>
                                                             </button>
                                                             <table className='table collapse border' id={`detail-${lapApel.apel_id}`}>
                                                                 <tbody>
@@ -220,7 +236,13 @@ export const LaporanPers = () => {
                                                                         <td>{Number(lapApel.tanpa_keterangan)}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td colSpan='4' className='p-0'><a href={`/laporan/pers/apel?tingkat=${lapApel.tingkat}&nomor=${lapApel.apel_id}`} className='btn w-100 text-end rounded-0'>Selengkapnya</a></td>
+                                                                        <td colSpan='2' className='p-0'><button type='button' onClick={()=>{
+                                                                            setEdit({
+                                                                                tingkat : lapApel.tingkat,
+                                                                                id : lapApel.apel_id
+                                                                            })
+                                                                        }} className={`btn btn-sm w-100 text-start rounded-0 ${editable['button-state'][lapApel.editable]}`} data-bs-toggle="modal" data-bs-target="#staticBackdropEditApel"><i className="bi bi-pencil-square"></i> Edit</button></td>
+                                                                        <td colSpan='2' className='p-0'><a href={`/laporan/pers/apel?tingkat=${lapApel.tingkat}&nomor=${lapApel.apel_id}`} className='btn btn-sm w-100 text-end rounded-0'>Selengkapnya <i className="bi bi-box-arrow-up-right"></i></a></td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -232,7 +254,6 @@ export const LaporanPers = () => {
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -241,6 +262,7 @@ export const LaporanPers = () => {
             </div>
             <ModalFormLapApel kadets={kadets} pleton={pleton} />
             <ModalFormForwardApel subordinates={subordinates} tingkat={jabatan.tingkat} />
+            <ModalFormEditApel tingkat={edit.tingkat} id={edit.id} />
         </div>
     )
 }

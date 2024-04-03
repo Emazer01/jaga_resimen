@@ -17,6 +17,7 @@ export const LaporanPersApel = () => {
 
     const [lapApel, setLapApel] = React.useState({})
     const [dataApel, setDataApel] = React.useState([])
+    const [subordinates, setSubordinates] = React.useState([])
 
     const [currentPage, setCurrentPage] = React.useState(1)
     const [postPerPage, setPostPerPage] = React.useState(10)
@@ -41,6 +42,9 @@ export const LaporanPersApel = () => {
             }
             setLapApel(x.lapApel.lap_apel[0])
             setDataApel(x.dataApel)
+            if (x.sub.lap_apel) {
+                setSubordinates(x.sub.lap_apel)
+            }
         })
         document.getElementById('sidebar-collapse').classList.add('show')
         document.getElementById('btn-dashboard').classList.remove('sidebar-active')
@@ -71,7 +75,7 @@ export const LaporanPersApel = () => {
                                             <table className='table'>
                                                 <thead>
                                                     <tr>
-                                                        <th className='align-middle'>Jenis Apel</th>
+                                                        <th className='align-middle col-4'>Jenis Apel</th>
                                                         <td className='align-middle'>{lapApel.jenis_apel_nama}</td>
                                                     </tr>
                                                     <tr>
@@ -94,52 +98,65 @@ export const LaporanPersApel = () => {
                                                         <th className='align-middle'>Pelapor</th>
                                                         <td className='align-middle'>{lapApel.pangkat_singkat} {lapApel.kadet_nama}</td>
                                                     </tr>
+                                                    <tr>
+                                                        <th className='align-middle'>Sumber</th>
+                                                        <td className='align-middle p-0'>
+                                                            {subordinates.map(x => {
+                                                                return (
+                                                                    <a href={`/laporan/pers/apel?tingkat=${x.tingkat}&nomor=${x.apel_id}`} className='btn btn-primary rounded-pill m-1 text-start p-1 px-2'>
+                                                                        <small>#{x.tingkat}-{x.apel_id}</small>
+                                                                    </a>
+                                                                )
+                                                            })}
+                                                        </td>
+                                                    </tr>
                                                 </thead>
                                             </table>
                                         </div>
-                                        <div className='col-12 col-lg-6 p-2 d-flex'>
-                                            <div className='col-4 d-flex p-1'>
-                                                <div className='btn btn-secondary w-100'>
-                                                    <span className='px-2 py-1'>Jumlah</span>
-                                                    <span className='p-2 d-flex align-items-center text-center'>
-                                                        <span className='w-100 fs-1 fw-bold'>{Number(lapApel.hadir) + Number(lapApel.sakit) + Number(lapApel.izin) + Number(lapApel.tanpa_keterangan)}</span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className='col-8 d-flex flex-wrap'>
-                                                <div className='col-6 p-1 d-flex'>
-                                                    <a className='btn btn-primary w-100'>
-                                                        <span className='px-2 py-1'>Hadir</span>
+                                        <div className='col-12 col-lg-6 p-2'>
+                                            <div className='d-flex'>
+                                                <div className='col-4 d-flex p-1'>
+                                                    <div className='btn btn-secondary w-100'>
+                                                        <strong className='px-2 py-1'>Jumlah</strong>
                                                         <span className='p-2 d-flex align-items-center text-center'>
-                                                            <span className='w-100 fs-1 fw-bold'>{Number(lapApel.hadir)}</span>
+                                                            <span className='w-100 display-3 fw-bold'>{Number(lapApel.hadir) + Number(lapApel.sakit) + Number(lapApel.izin) + Number(lapApel.tanpa_keterangan)}</span>
                                                         </span>
-                                                    </a>
+                                                    </div>
                                                 </div>
-                                                <div className='col-6 p-1 d-flex'>
-                                                    <a className='btn btn-success w-100' href='#sakit'>
-                                                        <span className='px-2 py-1'>Sakit</span>
-                                                        <span className='p-2 d-flex align-items-center text-center'>
-                                                            <span className='w-100 fs-1 fw-bold'>{Number(lapApel.sakit)}</span>
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                                <div className='col-6 p-1 d-flex'>
-                                                    <a className='btn btn-warning text-light w-100' href='#izin'>
-                                                        <span className='px-2 py-1'>Izin</span>
-                                                        <span className='p-2 d-flex align-items-center text-center'>
-                                                            <span className='w-100 fs-1 fw-bold'>{Number(lapApel.izin)}</span>
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                                <div className='col-6 p-1 d-flex'>
-                                                    <a className='btn btn-danger w-100' href='#tanpa-keterangan'>
-                                                        <span className='px-2 py-1'>Tanpa Keterangan</span>
-                                                        <span className='p-2 d-flex align-items-center text-center'>
-                                                            <span className='w-100 fs-1 fw-bold'>{Number(lapApel.tanpa_keterangan)}</span>
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </div>
+                                                <div className='col-8 d-flex flex-wrap'>
+                                                    <div className='col-6 p-1 d-flex'>
+                                                        <a className='btn btn-primary w-100'>
+                                                            <strong className='px-2 py-1'>Hadir</strong>
+                                                            <span className='p-2 d-flex align-items-center text-center'>
+                                                                <span className='w-100 display-5 fw-bold'>{Number(lapApel.hadir)}</span>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                    <div className='col-6 p-1 d-flex'>
+                                                        <a className='btn btn-success w-100' href='#sakit'>
+                                                            <strong className='px-2 py-1'>Sakit</strong>
+                                                            <span className='p-2 d-flex align-items-center text-center'>
+                                                                <span className='w-100 display-5 fw-bold'>{Number(lapApel.sakit)}</span>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                    <div className='col-6 p-1 d-flex'>
+                                                        <a className='btn btn-warning text-light w-100' href='#izin'>
+                                                            <strong className='px-2 py-1'>Izin</strong>
+                                                            <span className='p-2 d-flex align-items-center text-center'>
+                                                                <span className='w-100 display-5 fw-bold'>{Number(lapApel.izin)}</span>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                    <div className='col-6 p-1 d-flex'>
+                                                        <a className='btn btn-danger w-100' href='#tanpa-keterangan'>
+                                                            <strong className='px-2 py-1'>Tanpa Keterangan</strong>
+                                                            <span className='p-2 d-flex align-items-center text-center'>
+                                                                <span className='w-100 display-5 fw-bold'>{Number(lapApel.tanpa_keterangan)}</span>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </div></div>
                                         </div>
                                     </div>
                                     <div className='d-flex flex-wrap'>
@@ -159,7 +176,7 @@ export const LaporanPersApel = () => {
                                                         <tbody>
                                                             {currentPosts.map(x => {
                                                                 return (
-                                                                    <tr>
+                                                                    <tr key={x.data_apel_id}>
                                                                         <td>{x.kadet_nama}</td>
                                                                         <td>{x.pangkat_singkat}</td>
                                                                         <td>{x.satuan}</td>
@@ -181,9 +198,9 @@ export const LaporanPersApel = () => {
                                                 {dataApel.map(x => {
                                                     if (x.keterangan_nama == 'Sakit') {
                                                         return (
-                                                            <div class="card mb-3" key={x.sakit_id}>
-                                                                <img src={x.sakit.foto_isi} class="card-img-top" alt="..." />
-                                                                <div class="card-body p-1">
+                                                            <div className="card mb-3" key={x.sakit_id}>
+                                                                <img src={x.sakit.foto_isi} className="card-img-top" alt="..." />
+                                                                <div className="card-body p-1">
                                                                     <table className='table'>
                                                                         <tbody>
                                                                             <tr>
@@ -213,9 +230,9 @@ export const LaporanPersApel = () => {
                                                 {dataApel.map(x => {
                                                     if (x.keterangan_nama == 'Izin') {
                                                         return (
-                                                            <div class="card mb-3" key={x.izin_id}>
-                                                                <img src={x.izin.foto_isi} class="card-img-top" alt="..." />
-                                                                <div class="card-body p-1">
+                                                            <div className="card mb-3" key={x.izin_id}>
+                                                                <img src={x.izin.foto_isi} className="card-img-top" alt="..." />
+                                                                <div className="card-body p-1">
                                                                     <table className='table'>
                                                                         <tbody>
                                                                             <tr>
@@ -249,10 +266,10 @@ export const LaporanPersApel = () => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {dataApel.map(x=>{
+                                                        {dataApel.map(x => {
                                                             if (x.keterangan_nama == 'Tanpa Keterangan') {
-                                                                return(
-                                                                    <tr>
+                                                                return (
+                                                                    <tr key={x.data_apel_id}>
                                                                         <td>{x.pangkat_singkat} {x.kadet_nama}</td>
                                                                     </tr>
                                                                 )

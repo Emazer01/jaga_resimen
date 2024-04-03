@@ -173,10 +173,10 @@ const getWewenang = async () => {
             }
         });
     return ({
-        jabatan : jabatan,
-        kadets : kadets,
-        pleton_id : pleton_id,
-        pleton_nama : pleton_nama
+        jabatan: jabatan,
+        kadets: kadets,
+        pleton_id: pleton_id,
+        pleton_nama: pleton_nama
     })
 }
 
@@ -191,7 +191,6 @@ const getListLapApel = async () => {
     )
         .then(function (response) {
             if (response.status == 200) {
-                console.log(response.headers)
                 listLapApel = response.data
             }
         })
@@ -227,6 +226,52 @@ const getLapApel = async () => {
     return (result)
 }
 
+const getLapApel2 = async (tingkat, id) => {
+    var result = {}
+    try {
+        await axios.get(`${process.env.REACT_APP_BACKEND_URL}/apel?tingkat=${tingkat}&id=${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+                }
+            }
+        )
+            .then(function (response) {
+                if (response.status == 200) {
+                    result = response.data
+                    result.lapApel.lap_apel[0].tingkat = result.lapApel.lap_apel[0].tingkat[0].toUpperCase() + result.lapApel.lap_apel[0].tingkat.slice(1)
+                }
+            })
+            .catch(function (error) {
+                console.clear()
+            });
+    } catch (error) {
+        console.clear()
+    }
+    return (result)
+}
+
+const getListLapGiat = async () => {
+    var listLapGiat = []
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/listLapGiat`,
+        {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            }
+        }
+    )
+        .then(function (response) {
+            if (response.status == 200) {
+                console.log(response.headers)
+                listLapGiat = response.data
+            }
+        })
+        .catch(function (error) {
+            console.log(error)
+        });
+    return (listLapGiat)
+}
+
 export {
     getKadets,
     getKadet,
@@ -237,5 +282,7 @@ export {
     getDds,
     getWewenang,
     getListLapApel,
-    getLapApel
+    getLapApel,
+    getListLapGiat,
+    getLapApel2
 };
