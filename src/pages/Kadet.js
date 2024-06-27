@@ -166,12 +166,12 @@ export const Kadet = () => {
         })
         document.getElementById('btn-dashboard').classList.remove('sidebar-active')
         document.getElementById('btn-personil').classList.add('sidebar-active')
-    
+
         document.getElementById('nav-btn-dashboard').classList.remove('sidebar-active')
         document.getElementById('nav-btn-personil').classList.add('sidebar-active')
     }, [])
 
-    const showLess = ({slice,set}) => {
+    const showLess = ({ slice, set }) => {
         if (slice[1] > 5) {
             return (
                 <button onClick={() => { set([0, 5]) }} className='btn text-decoration-underline'>Show less</button>
@@ -179,7 +179,7 @@ export const Kadet = () => {
         }
 
     }
-    const showMore = ({slice,set}) => {
+    const showMore = ({ slice, set }) => {
         if (slice[1] < listKet.length) {
             return (
                 <button onClick={() => { set([0, slice[1] + 5]) }} className='btn text-decoration-underline'>Show more</button>
@@ -218,7 +218,7 @@ export const Kadet = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='p-1 p-lg-2 pb-3 col-12 d-flex flex-wrap'>
+                        <div className='p-1 p-lg-2 pb-3 col-12 col-md-9 d-flex flex-wrap'>
                             <div className='card shadow w-100'>
                                 <h4 className='card-header d-flex border-bottom'>Data Diri
                                     <i className="fs-2 bi bi-person-vcard-fill ms-auto"></i>
@@ -231,7 +231,7 @@ export const Kadet = () => {
                                             </div>
                                         </div>
                                         <div className='col-12 col-lg-9 px-lg-3 table-responsive d-flex align-items-center'>
-                                            <table className='fs-5 table table-striped'>
+                                            <table className='table table-striped'>
                                                 <tbody>
                                                     <tr>
                                                         <th className='align-top'>Nama</th>
@@ -276,6 +276,37 @@ export const Kadet = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className='p-1 p-lg-2 pb-3 col-12 col-md-3 d-flex flex-wrap'>
+                            <div className='card shadow w-100'>
+                                <h4 className='card-header d-flex border-bottom'>Rangkuman
+                                    <i className="fs-2 bi bi-person-vcard-fill ms-auto"></i>
+                                </h4>
+                                <div className='card-body align-item-center px-4'>
+                                    <select className='form-select'>
+                                        <option>Minggu Ini</option>
+                                        <option>Bulan Ini</option>
+                                        <option>Tahun Ini</option>
+                                        <option>Semua</option>
+                                    </select>
+                                    <table className='table mt-2'>
+                                        <tbody>
+                                            <tr>
+                                                <th>Sakit</th>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Izin</th>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tanpa Keterangan</th>
+                                                <td>1</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                         <div className='p-1 p-lg-2 pb-3 col-12 d-flex flex-wrap'>
                             <div className='card shadow w-100'>
                                 <h4 className='card-header d-flex border-bottom'>Riwayat
@@ -293,8 +324,8 @@ export const Kadet = () => {
                                                     </div>
                                                 )
                                             })}
-                                            {showLess({slice:sliceKet, set:setSliceKet})}
-                                            {showMore({slice:sliceKet, set:setSliceKet})}
+                                            {showLess({ slice: sliceKet, set: setSliceKet })}
+                                            {showMore({ slice: sliceKet, set: setSliceKet })}
                                             <span className='border-4 border-dark border position-absolute' style={{ width: 15, left: -5 }}></span>
                                         </div>
                                     </div>
@@ -309,8 +340,8 @@ export const Kadet = () => {
                                                     </div>
                                                 )
                                             })}
-                                            {showLess({slice:sliceGiat, set:setSliceGiat})}
-                                            {showMore({slice:sliceGiat, set:setSliceGiat})}
+                                            {showLess({ slice: sliceGiat, set: setSliceGiat })}
+                                            {showMore({ slice: sliceGiat, set: setSliceGiat })}
                                             <span className='border-4 border-dark border position-absolute' style={{ width: 15, left: -5 }}></span>
                                         </div>
                                     </div>
