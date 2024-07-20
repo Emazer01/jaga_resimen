@@ -1,6 +1,25 @@
-import * as React from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2';
-import { Chart as ChartJS } from 'chart.js/auto';
+import { useRef } from 'react';
+
+import { Bar, Line, Pie, getElementsAtEvent } from 'react-chartjs-2';
+import { 
+    Chart as ChartJS, 
+    LogarithmicScale,
+    LineElement,
+    PointElement,
+    CategoryScale,
+    LinearScale,
+    Tooltip,
+    Legend
+} from 'chart.js/auto';
+
+ChartJS.register(
+    LineElement,
+    PointElement,
+    CategoryScale,
+    LinearScale,
+    Tooltip,
+    Legend
+)
 
 const PieChart = ({ data }) => {
     return (
@@ -16,6 +35,14 @@ const BarChart = ({ data }) => {
 }
 
 const LineChart = ({ data }) => {
+    const chartRef = useRef();
+    const onClick = (event) => {
+        if (getElementsAtEvent(chartRef.current, event).length > 0) {
+            console.log(getElementsAtEvent(chartRef.current, event)[0].index)
+            window.open(`/laporan/pers/apel?tingkat=resimen&nomor=${data.links[getElementsAtEvent(chartRef.current, event)[0].index]}`)
+        }
+        
+    }
     const options = {
         interaction: {
             mode: 'index',
@@ -39,13 +66,13 @@ const LineChart = ({ data }) => {
                 },
                 weight: 5
             },
-            stackWeight: 10
+            stackWeight: 0
         },
         responsive: true,
         maintainAspectRatio: false
     }
     return (
-        <Line data={data} options={options} />
+        <Line data={data} options={options} onClick={onClick} ref={chartRef}/>
     )
 }
 

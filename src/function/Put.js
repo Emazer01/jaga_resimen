@@ -48,7 +48,7 @@ const handleChangePassword = async (event) => {
     }
 }
 
-const handleEditKadet = async (event,foto) => {
+const handleEditKadet = async (event, foto) => {
     event.preventDefault();
     document.getElementById("edit-kadet-loading").classList.remove('d-none')
     const data = new FormData(event.currentTarget);
@@ -105,8 +105,7 @@ const handleEditKadet = async (event,foto) => {
 const handleAssignJabatan = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(document.getElementById('input-assign-tingkat').value, document.getElementById('input-assign-jabatan').value, data.get('input-assign-pejabat'))
-    await axios.put(`${process.env.REACT_APP_BACKEND_URL}/assignJabatan`,
+    await axios.put(`${process.env.REACT_APP_BACKEND_URL}/jabatans/assign`,
         {
             tingkat: document.getElementById('input-assign-tingkat').value,
             jabatan_id: document.getElementById('input-assign-jabatan').value,
@@ -145,8 +144,7 @@ const handleAssignJabatan = async (event) => {
 const handleAssignDinas = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(document.getElementById('input-assign-tingkat').value, document.getElementById('input-assign-jabatan').value, data.get('input-assign-pejabat'))
-    await axios.put(`${process.env.REACT_APP_BACKEND_URL}/assignDinas`,
+    await axios.put(`${process.env.REACT_APP_BACKEND_URL}/dds/assign`,
         {
             tingkat: document.getElementById('input-assign-tingkat').value,
             dinas_id: document.getElementById('input-assign-jabatan').value,
@@ -182,9 +180,48 @@ const handleAssignDinas = async (event) => {
         });
 }
 
+const handleApproveGiat = async (giat_id) => {
+    console.log(giat_id)
+    document.getElementById("edit-approve-loading").classList.remove('d-none')
+    await axios.put(`${process.env.REACT_APP_BACKEND_URL}/approveGiat`,
+        {
+            giat_id: giat_id
+        },
+        {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            }
+        }
+    )
+        .then(async function (response) {
+            if (response.status == 200) {
+                document.getElementById("edit-approve-loading").classList.add('d-none')
+                document.getElementById("edit-approve-success").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("edit-approve-success").classList.add('d-none')
+                //window.location.reload()
+            } else {
+                console.log("udah kirim")
+                document.getElementById("edit-approve-loading").classList.add('d-none')
+                document.getElementById("edit-approve-danger").classList.remove('d-none')
+                await sleep(1500)
+                document.getElementById("edit-approve-danger").classList.add('d-none')
+            }
+        })
+        .catch(async function (error) {
+            console.log("error kirim")
+            document.getElementById("edit-approve-loading").classList.add('d-none')
+            document.getElementById("edit-approve-danger").classList.remove('d-none')
+            await sleep(1500)
+            document.getElementById("edit-approve-danger").classList.add('d-none')
+        });
+}
+
+
 export {
     handleChangePassword,
     handleEditKadet,
     handleAssignJabatan,
-    handleAssignDinas
+    handleAssignDinas,
+    handleApproveGiat
 };

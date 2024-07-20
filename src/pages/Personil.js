@@ -96,28 +96,28 @@ export const Personil = () => {
                                         <table className='table table-clickable table-striped'>
                                             <thead>
                                                 <tr>
-                                                    <th>NIM</th>
+                                                    <th className='d-none d-md-table-cell'>NIM</th>
                                                     <th>Nama</th>
                                                     <th>L/P</th>
-                                                    <th>Angkatan</th>
-                                                    <th>Pleton</th>
+                                                    <th className='d-none d-md-table-cell'>Angkatan</th>
+                                                    <th className='d-none d-md-table-cell'>Pleton</th>
                                                     <th>Keterangan</th>
-                                                    <th>Jabatan</th>
-                                                    <th>Dinas</th>
+                                                    <th className='d-none d-md-table-cell'>Jabatan</th>
+                                                    <th className='d-none d-md-table-cell'>Dinas</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {currentPosts.map(kadet => {
                                                     return (
                                                         <tr key={kadet.kadet_id}>
-                                                            <td className='p-0'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.kadet_nim}</a></td>
+                                                            <td className='p-0 d-none d-md-table-cell'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.kadet_nim}</a></td>
                                                             <td className='p-0'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.pangkat_singkat} {kadet.kadet_nama}</a></td>
                                                             <td className='p-0'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.jenis_kelamin}</a></td>
-                                                            <td className='p-0'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.angkatan}</a></td>
-                                                            <td className='p-0'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.pleton_nama} {kadet.kompi_nama} {kadet.batalyon_nama}</a></td>
+                                                            <td className='p-0 d-none d-md-table-cell'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.angkatan}</a></td>
+                                                            <td className='p-0 d-none d-md-table-cell'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.pleton_nama} {kadet.kompi_nama} {kadet.batalyon_nama}</a></td>
                                                             <td className='p-0'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-light'><div className='rounded-2 px-2' style={{ backgroundColor: keterangan_color[kadet.keterangan_nama] }}>{kadet.keterangan_nama}</div></a></td>
-                                                            <td className='p-0'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.jabatan_pleton_nama} {kadet.jabatan_kompi_nama} {kadet.jabatan_batalyon_nama} {kadet.jabatan_resimen_nama}</a></td>
-                                                            <td className='p-0'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.dd_pleton_nama} {kadet.dd_kompi_nama} {kadet.dd_batalyon_nama} {kadet.dd_resimen_nama}</a></td>
+                                                            <td className='p-0 d-none d-md-table-cell'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.jabatan_pleton_nama} {kadet.jabatan_kompi_nama} {kadet.jabatan_batalyon_nama} {kadet.jabatan_resimen_nama}</a></td>
+                                                            <td className='p-0 d-none d-md-table-cell'><a href={`/personil/kadet?nim=${kadet.kadet_nim}`} className='p-2 text-decoration-none text-dark'>{kadet.dd_pleton_nama} {kadet.dd_kompi_nama} {kadet.dd_batalyon_nama} {kadet.dd_resimen_nama}</a></td>
                                                         </tr>
                                                     )
                                                 })}

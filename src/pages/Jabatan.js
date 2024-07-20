@@ -162,9 +162,9 @@ export const Jabatan = () => {
                                             <thead>
                                                 <tr className='border-bottom'>
                                                     <th>Jabatan</th>
-                                                    <th>Jenis</th>
-                                                    <th>Tingkat</th>
-                                                    <th>Status</th>
+                                                    <th className='d-none d-md-table-cell'>Jenis</th>
+                                                    <th className='d-none d-md-table-cell'>Tingkat</th>
+                                                    <th className='d-none d-md-table-cell'>Status</th>
                                                     <th>Pejabat</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -174,13 +174,12 @@ export const Jabatan = () => {
                                                     return (
                                                         <tr key={jabatan.jabatan_nama}>
                                                             <td>{jabatan.jabatan_nama}</td>
-                                                            <td>{jabatan.jenis}</td>
-                                                            <td>{jabatan.tingkat}</td>
-                                                            <td>{jabatan.status}</td>
+                                                            <td className='d-none d-md-table-cell'>{jabatan.jenis}</td>
+                                                            <td className='d-none d-md-table-cell'>{jabatan.tingkat}</td>
+                                                            <td className='d-none d-md-table-cell'>{jabatan.status}</td>
                                                             <td>{jabatan.pangkat} {jabatan.kadet_nama}</td>
                                                             <td className='p-0'>
                                                                 <button onClick={() => { setCurrentJabatan(jabatan) }} className='btn btn-secondary m-1' data-bs-toggle="modal" data-bs-target="#staticBackdropAssignMenkorps">Assign</button>
-                                                                <button className='btn btn-danger m-1'>Nonaktifkan</button>
                                                             </td>
                                                         </tr>
                                                     )

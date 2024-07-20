@@ -86,6 +86,7 @@ export const Dinas = () => {
         })
         getKadets().then(x => {
             setKadets(x)
+            console.log(x)
         })
 
         document.getElementById('btn-dashboard').classList.remove('sidebar-active')
@@ -163,9 +164,9 @@ export const Dinas = () => {
                                             <thead>
                                                 <tr className='border-bottom'>
                                                     <th>Dinas Dalam</th>
-                                                    <th>Jenis</th>
-                                                    <th>Tingkat</th>
-                                                    <th>Status</th>
+                                                    <th className='d-none d-md-table-cell'>Jenis</th>
+                                                    <th className='d-none d-md-table-cell'>Tingkat</th>
+                                                    <th className='d-none d-md-table-cell'>Status</th>
                                                     <th>Pejabat</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -175,13 +176,12 @@ export const Dinas = () => {
                                                     return(
                                                         <tr key={dinas.dd_nama}>
                                                             <td>{dinas.dd_nama}</td>
-                                                            <td>{dinas.jenis}</td>
-                                                            <td>{dinas.tingkat}</td>
-                                                            <td>{dinas.status}</td>
+                                                            <td className='d-none d-md-table-cell'>{dinas.jenis}</td>
+                                                            <td className='d-none d-md-table-cell'>{dinas.tingkat}</td>
+                                                            <td className='d-none d-md-table-cell'>{dinas.status}</td>
                                                             <td>{dinas.pangkat} {dinas.kadet_nama}</td>
                                                             <td className='p-0'>
                                                                 <button onClick={() => { setCurrentDds(dinas) }} className='btn btn-secondary m-1' data-bs-toggle="modal" data-bs-target="#staticBackdropAssignDinas">Assign</button>
-                                                                <button className='btn btn-danger m-1'>Nonaktifkan</button>
                                                             </td>
                                                         </tr>
                                                     )

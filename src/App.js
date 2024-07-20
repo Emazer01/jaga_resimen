@@ -22,6 +22,7 @@ import { Dinas } from './pages/Dinas';
 import { LaporanPers } from './pages/LaporanPers';
 import { LaporanGiat } from './pages/LaporanGiat';
 import { LaporanPersApel } from './pages/LaporanPersApel';
+import { LaporanGiatDetail } from './pages/LaporanGiatDetail';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/laporan/pers" element={<LaporanPers />}></Route>
         <Route path="/laporan/pers/apel" element={<LaporanPersApel />}></Route>
         <Route path="/laporan/giat" element={<LaporanGiat />}></Route>
+        <Route path="/laporan/giat/detail" element={<LaporanGiatDetail />}></Route>
         <Route path="/forbidden" element={<Forbidden />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>

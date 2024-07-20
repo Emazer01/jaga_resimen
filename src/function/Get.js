@@ -1,8 +1,28 @@
 import axios from 'axios';
 
+const getTrends = async () => {
+    var listLapApel = []
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/trends`,
+        {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            }
+        }
+    )
+        .then(function (response) {
+            if (response.status == 200) {
+                listLapApel = response.data
+            }
+        })
+        .catch(function (error) {
+            console.log(error)
+        });
+    return (listLapApel)
+}
+
 const getKadets = async () => {
     var kadets = {}
-    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/kadets`,
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/kadet/all`,
         {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`
@@ -21,12 +41,12 @@ const getKadets = async () => {
     return (kadets)
 }
 
-const getKadet = async () => {
+const getKadet = async (riwayatApel) => {
     var kadet = {}
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const kadet_nim = urlParams.get('nim')
-    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/kadet?nim=${kadet_nim}`,
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/kadet/detail?nim=${kadet_nim}&riwayatApel=${riwayatApel}`,
         {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`
@@ -44,9 +64,9 @@ const getKadet = async () => {
     return (kadet)
 }
 
-const myKadet = async () => {
+const myKadet = async (riwayatApel) => {
     var kadet = {}
-    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/mykadet`,
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/kadet/my?riwayatApel=${riwayatApel}`,
         {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`
@@ -182,7 +202,7 @@ const getWewenang = async () => {
 
 const getListLapApel = async () => {
     var listLapApel = []
-    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/listLapApel`,
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/laporan/apel`,
         {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`
@@ -206,7 +226,7 @@ const getLapApel = async () => {
     const urlParams = new URLSearchParams(queryString);
     const tingkat = urlParams.get('tingkat')
     const id = urlParams.get('nomor')
-    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/apel?tingkat=${tingkat}&id=${id}`,
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/laporan/apel/detail?tingkat=${tingkat}&id=${id}`,
         {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`
@@ -229,7 +249,7 @@ const getLapApel = async () => {
 const getLapApel2 = async (tingkat, id) => {
     var result = {}
     try {
-        await axios.get(`${process.env.REACT_APP_BACKEND_URL}/apel?tingkat=${tingkat}&id=${id}`,
+        await axios.get(`${process.env.REACT_APP_BACKEND_URL}/laporan/apel/detail?tingkat=${tingkat}&id=${id}`,
             {
                 headers: {
                     "Authorization": `Bearer ${localStorage.getItem("access_token")}`
@@ -251,9 +271,57 @@ const getLapApel2 = async (tingkat, id) => {
     return (result)
 }
 
+const getLapGiat = async () => {
+    var result = {}
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const nomor = urlParams.get('nomor')
+    try {
+        await axios.get(`${process.env.REACT_APP_BACKEND_URL}/giat?nomor=${nomor}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+                }
+            }
+        )
+            .then(function (response) {
+                if (response.status == 200) {
+                    result = response.data
+                }
+            })
+            .catch(function (error) {
+                console.clear()
+            });
+    } catch (error) {
+        console.clear()
+    }
+    return (result)
+}
+
 const getListLapGiat = async () => {
     var listLapGiat = []
-    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/listLapGiat`,
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/laporan/giat`,
+        {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            }
+        }
+    )
+        .then(function (response) {
+            if (response.status == 200) {
+                console.log(response.headers)
+                listLapGiat = response.data
+            }
+        })
+        .catch(function (error) {
+            console.log(error)
+        });
+    return (listLapGiat)
+}
+
+const getListUnapprovedGiat = async () => {
+    var listLapGiat = []
+    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/listUnapprovedGiat`,
         {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`
@@ -283,6 +351,9 @@ export {
     getWewenang,
     getListLapApel,
     getLapApel,
+    getLapGiat,
     getListLapGiat,
-    getLapApel2
+    getListUnapprovedGiat,
+    getLapApel2,
+    getTrends
 };

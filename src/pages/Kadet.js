@@ -23,143 +23,27 @@ export const Kadet = () => {
         'P': 'Perempuan'
     }
 
-    const [kadet, setKadet] = React.useState({})
+    const [limit, setLimit] = React.useState({
+        riwayatApel: 5
+    })
 
-    const listKet = [
-        {
-            keterangan_id: 11,
-            keterangan_nama: 'Hadir',
-            laporan_judul: 'Laporan Apel Pagi',
-            tanggal: '18/02/2024'
-        }, {
-            keterangan_id: 10,
-            keterangan_nama: 'Hadir',
-            laporan_judul: 'Laporan Apel Malam',
-            tanggal: '17/02/2024'
-        }, {
-            keterangan_id: 9,
-            keterangan_nama: 'Hadir',
-            laporan_judul: 'Laporan Apel Pagi',
-            tanggal: '17/02/2024'
-        }, {
-            keterangan_id: 8,
-            keterangan_nama: 'Sakit',
-            laporan_judul: 'Laporan Apel Malam',
-            tanggal: '16/02/2024'
-        }, {
-            keterangan_id: 7,
-            keterangan_nama: 'Sakit',
-            laporan_judul: 'Laporan Apel Pagi',
-            tanggal: '16/02/2024'
-        }, {
-            keterangan_id: 6,
-            keterangan_nama: 'Hadir',
-            laporan_judul: 'Laporan Apel Malam',
-            tanggal: '15/02/2024'
-        }, {
-            keterangan_id: 5,
-            keterangan_nama: 'Izin',
-            laporan_judul: 'Laporan Apel Pagi',
-            tanggal: '15/02/2024'
-        }, {
-            keterangan_id: 4,
-            keterangan_nama: 'Hadir',
-            laporan_judul: 'Laporan Apel Malam',
-            tanggal: '14/02/2024'
-        }, {
-            keterangan_id: 3,
-            keterangan_nama: 'Hadir',
-            laporan_judul: 'Laporan Apel Pagi',
-            tanggal: '14/02/2024'
-        }, {
-            keterangan_id: 2,
-            keterangan_nama: 'Hadir',
-            laporan_judul: 'Laporan Apel Malam',
-            tanggal: '13/02/2024'
-        }, {
-            keterangan_id: 1,
-            keterangan_nama: 'Hadir',
-            laporan_judul: 'Laporan Apel Pagi',
-            tanggal: '13/02/2024'
-        }
-    ]
-    const [sliceKet, setSliceKet] = React.useState([0, 5])
-    const [viewKet, setViewKet] = React.useState([])
-
-    React.useEffect(() => {
-        setViewKet(listKet.slice(sliceKet[0], sliceKet[1]))
-    }, [sliceKet])
-
-    const listGiat = [
-        {
-            giat_id: 11,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Hambalang',
-            tanggal: '18/02/2024'
-        }, {
-            giat_id: 10,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Kemhan Pusat',
-            tanggal: '17/02/2024'
-        }, {
-            giat_id: 9,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Hambalang',
-            tanggal: '17/02/2024'
-        }, {
-            giat_id: 8,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Kemhan Pusat',
-            tanggal: '16/02/2024'
-        }, {
-            giat_id: 7,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Hambalang',
-            tanggal: '16/02/2024'
-        }, {
-            giat_id: 6,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Kemhan Pusat',
-            tanggal: '15/02/2024'
-        }, {
-            giat_id: 5,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Hambalang',
-            tanggal: '15/02/2024'
-        }, {
-            giat_id: 4,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Kemhan Pusat',
-            tanggal: '14/02/2024'
-        }, {
-            giat_id: 3,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Hambalang',
-            tanggal: '14/02/2024'
-        }, {
-            giat_id: 2,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Kemhan Pusat',
-            tanggal: '13/02/2024'
-        }, {
-            giat_id: 1,
-            giat_nama: 'Parade Surya Senja',
-            giat_tempat: 'Hambalang',
-            tanggal: '13/02/2024'
-        }
-    ]
-    const [sliceGiat, setSliceGiat] = React.useState([0, 5])
-    const [viewGiat, setViewGiat] = React.useState([])
-
-    React.useEffect(() => {
-        setViewGiat(listGiat.slice(sliceGiat[0], sliceGiat[1]))
-    }, [sliceGiat])
+    const [kadet, setKadet] = React.useState({
+        riwayatApel: [{
+            apel_men_date: ''
+        }],
+        rangkuman: {
+            sakit: [],
+            izin: [],
+            tanpa_keterangan: []
+        },
+        listLapGiat:[]
+    })
 
     React.useEffect(() => {
         verifikasi()
-        getKadet().then(x => {
+        getKadet(limit.riwayatApel).then(x => {
             setKadet(x)
-            console.log(x)
+            console.log(x.riwayatApel)
             if (x) {
                 document.title = `${x.kadet_nama} - Pusat Informasi Resimen Korps Kadet`
             }
@@ -169,23 +53,25 @@ export const Kadet = () => {
 
         document.getElementById('nav-btn-dashboard').classList.remove('sidebar-active')
         document.getElementById('nav-btn-personil').classList.add('sidebar-active')
-    }, [])
+    }, [limit])
 
-    const showLess = ({ slice, set }) => {
-        if (slice[1] > 5) {
-            return (
-                <button onClick={() => { set([0, 5]) }} className='btn text-decoration-underline'>Show less</button>
-            )
-        }
-
+    const changeRangkuman = () => {
+        document.getElementById('rangkuman-sakit').innerHTML = kadet.rangkuman.sakit[document.getElementById('rangkuman-select').value]
+        document.getElementById('rangkuman-izin').innerHTML = kadet.rangkuman.izin[document.getElementById('rangkuman-select').value]
+        document.getElementById('rangkuman-tanpa_keterangan').innerHTML = kadet.rangkuman.tanpa_keterangan[document.getElementById('rangkuman-select').value]
     }
-    const showMore = ({ slice, set }) => {
-        if (slice[1] < listKet.length) {
-            return (
-                <button onClick={() => { set([0, slice[1] + 5]) }} className='btn text-decoration-underline'>Show more</button>
-            )
-        }
 
+    const moreApel = () => {
+        setLimit({
+            ...limit, riwayatApel: limit.riwayatApel + 5
+        })
+        document.getElementById('btn-show-less').classList.remove('d-none')
+    }
+    const lessApel = () => {
+        setLimit({
+            ...limit, riwayatApel: 5
+        })
+        document.getElementById('btn-show-less').classList.add('d-none')
     }
 
     return (
@@ -226,7 +112,7 @@ export const Kadet = () => {
                                 <div className='card-body d-flex align-item-center px-4'>
                                     <div className='d-flex flex-wrap w-100'>
                                         <div className='col-12 col-lg-3'>
-                                            <div className='p-1'>
+                                            <div className='px-5 px-md-1 py-2 py-md-1'>
                                                 <img src={kadet.foto_isi} className="rounded-2 w-100" />
                                             </div>
                                         </div>
@@ -260,13 +146,7 @@ export const Kadet = () => {
                                                     <tr>
                                                         <th className='align-top'>Status</th>
                                                         <td className='ps-3'>
-                                                            <span className={`rounded-2 px-2 text-white p-0 bg-${status_color[kadet.status_nama]}`}>{kadet.status_nama}</span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th className='align-top'>Keterangan</th>
-                                                        <td className='ps-3'>
-                                                            <span className={`rounded-2 px-2 text-white p-0 bg-${keterangan_color[kadet.keterangan_nama]}`}>{kadet.keterangan_nama}</span>
+                                                            <span className={`rounded-2 px-2 text-white p-0 bg-${status_color[kadet.status]}`}>{kadet.status}</span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -282,25 +162,25 @@ export const Kadet = () => {
                                     <i className="fs-2 bi bi-person-vcard-fill ms-auto"></i>
                                 </h4>
                                 <div className='card-body align-item-center px-4'>
-                                    <select className='form-select'>
-                                        <option>Minggu Ini</option>
-                                        <option>Bulan Ini</option>
-                                        <option>Tahun Ini</option>
-                                        <option>Semua</option>
+                                    <select className='form-select' id='rangkuman-select' onChange={changeRangkuman}>
+                                        <option value='minggu_ini'>Minggu Ini</option>
+                                        <option value='bulan_ini'>Bulan Ini</option>
+                                        <option value='tahun_ini'>Tahun Ini</option>
+                                        <option value='semua'>Semua</option>
                                     </select>
                                     <table className='table mt-2'>
                                         <tbody>
                                             <tr>
                                                 <th>Sakit</th>
-                                                <td>1</td>
+                                                <td id='rangkuman-sakit'>{kadet.rangkuman.sakit['minggu_ini']}</td>
                                             </tr>
                                             <tr>
                                                 <th>Izin</th>
-                                                <td>1</td>
+                                                <td id='rangkuman-izin'>{kadet.rangkuman.izin['minggu_ini']}</td>
                                             </tr>
                                             <tr>
                                                 <th>Tanpa Keterangan</th>
-                                                <td>1</td>
+                                                <td id='rangkuman-tanpa_keterangan'>{kadet.rangkuman.tanpa_keterangan['minggu_ini']}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -314,34 +194,34 @@ export const Kadet = () => {
                                 </h4>
                                 <div className='card-body p-2 d-flex flex-wrap'>
                                     <div className='col-12 col-lg-6 p-3'>
-                                        <strong>Keterangan</strong>
+                                        <strong>Apel</strong>
                                         <div className='mt-2 position-relative'>
-                                            {viewKet.map(view => {
+                                            {kadet.riwayatApel.map(view => {
                                                 return (
-                                                    <div key={view.keterangan_id} className='border-5 border-dark p-1 ps-3 border-start position-relative'>
-                                                        <button className={`btn btn-${keterangan_color[view.keterangan_nama]} w-100 rounded-0 text-start`}>{view.keterangan_nama}, {view.laporan_judul} {view.tanggal}</button>
+                                                    <div key={view.data_apel_id} className='border-5 border-dark p-1 ps-3 border-start position-relative'>
+                                                        <a href={`/laporan/pers/apel?tingkat=resimen&nomor=${view.apel_men_id}`} className={`btn btn-${keterangan_color[view.keterangan_nama]} w-100 rounded-0 text-start`}>{view.keterangan_nama}, Laporan {view.jenis_apel_nama} {view.apel_men_date.slice(0, 10)}</a>
                                                         <span className='rounded-circle border-4 border-dark timeline-circle border position-absolute'></span>
                                                     </div>
                                                 )
                                             })}
-                                            {showLess({ slice: sliceKet, set: setSliceKet })}
-                                            {showMore({ slice: sliceKet, set: setSliceKet })}
                                             <span className='border-4 border-dark border position-absolute' style={{ width: 15, left: -5 }}></span>
+                                            <div className='mt-2'>
+                                                <button onClick={lessApel} className='btn text-decoration-underline p-1 d-none' id='btn-show-less'><small>Show less</small></button>
+                                                <button onClick={moreApel} className='btn text-decoration-underline p-1'><small>Show more</small></button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className='col-12 col-lg-6 p-3'>
                                         <strong>Kegiatan</strong>
                                         <div className='mt-2 position-relative'>
-                                            {viewGiat.map(view => {
+                                            {/*kadet.listLapGiat.map(view => {
                                                 return (
                                                     <div key={view.giat_id} className='border-5 border-dark p-1 ps-3 border-start position-relative'>
-                                                        <button className='btn btn-secondary w-100 rounded-0 text-start'>{view.giat_nama}, {view.giat_tempat} {view.tanggal}</button>
+                                                        <a href={`/laporan/giat/detail?nomor=${view.giat_id}`} className='btn btn-secondary w-100 rounded-0 text-start'>{view.giat_nama}</a>
                                                         <span className='rounded-circle border-4 border-dark timeline-circle border position-absolute'></span>
                                                     </div>
                                                 )
-                                            })}
-                                            {showLess({ slice: sliceGiat, set: setSliceGiat })}
-                                            {showMore({ slice: sliceGiat, set: setSliceGiat })}
+                                            })*/}
                                             <span className='border-4 border-dark border position-absolute' style={{ width: 15, left: -5 }}></span>
                                         </div>
                                     </div>

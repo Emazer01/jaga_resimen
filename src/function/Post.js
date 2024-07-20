@@ -12,7 +12,7 @@ const handleTambahAdmin = async (event) => {
         await sleep(1500)
         document.getElementById("tambah-admin-danger").classList.add('d-none')
     } else {
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tambahAkun`,
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/accounts/add`,
             {
                 username: data.get('input-username'),
                 password: data.get('input-password'),
@@ -61,7 +61,7 @@ const handleTambahPengasuh = async (event) => {
         await sleep(1500)
         document.getElementById("tambah-pengasuh-danger").classList.add('d-none')
     } else {
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tambahAkun`,
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/accounts/add`,
             {
                 username: data.get('input-username'),
                 password: data.get('input-password'),
@@ -110,7 +110,7 @@ const handleTambahKadet = async (event, foto) => {
         await sleep(1500)
         document.getElementById("tambah-kadet-danger").classList.add('d-none')
     } else {
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tambahKadet`,
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/accounts/addKadet`,
             {
                 username: data.get('input-username'),
                 password: data.get('input-password'),
@@ -163,7 +163,7 @@ const handleTambahKadetBulk = async (event, foto, excel) => {
         if (excel[index].username == null || excel[index].password == null || excel[index].nama == null || excel[index].nim == null || excel[index].pangkat_id == null || excel[index].pleton_id == null) {
             document.getElementById('tambah-kadetBulk-status').innerHTML += `<span class='text-danger'>${excel[index].nama}&nbsp;<i class="bi bi-x-circle-fill"></i></span><br/>`
         } else {
-            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tambahKadet`,
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/accounts/addKadet`,
                 {
                     username: excel[index].username,
                     password: excel[index].password,
@@ -184,12 +184,14 @@ const handleTambahKadetBulk = async (event, foto, excel) => {
             )
                 .then(async function (response) {
                     if (response.status == 200) {
+                        console.log(response)
                         document.getElementById('tambah-kadetBulk-status').innerHTML += `<span class='text-success'>${excel[index].nama}&nbsp;<i class="bi bi-check-circle-fill"></i></span><br/>`
                     } else {
                         document.getElementById('tambah-kadetBulk-status').innerHTML += `<span class='text-danger'>${excel[index].nama}&nbsp;<i class="bi bi-x-circle-fill"></i></span><br/>`
                     }
                 })
                 .catch(async function (error) {
+                    console.log(error)
                     document.getElementById('tambah-kadetBulk-status').innerHTML += `<span class='text-danger'>${excel[index].nama}&nbsp;<i class="bi bi-x-circle-fill"></i></span><br/>`
                 });
 
@@ -344,7 +346,7 @@ const handleLapApel = async (event, kadets) => {
         pleton_id: data.get('input-pleton-id'),
         data: listKet
     })
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/dataApel`,
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/laporan/apel/create`,
         {
             jenis_apel: data.get('jenis-apel'),
             pleton_id: data.get('input-pleton-id'),
@@ -417,7 +419,6 @@ const handleEditApel = async (event, dataApel, cek) => {
                         data_apel_id: dataApel[index].data_apel_id,
                         keterangan_id: data.get(`keterangan_id-${dataApel[index].data_apel_id}`),
                         sakit: {
-                            kadet_id: dataApel[index].kadet_id,
                             sakit_nama: data.get(`sakit-${dataApel[index].data_apel_id}`),
                             sakit_detail: data.get(`detail-sakit-${dataApel[index].data_apel_id}`),
                             foto: document.getElementById(`display-foto-sakit-${dataApel[index].data_apel_id}`).src
@@ -431,7 +432,6 @@ const handleEditApel = async (event, dataApel, cek) => {
                         data_apel_id: dataApel[index].data_apel_id,
                         keterangan_id: data.get(`keterangan_id-${dataApel[index].data_apel_id}`),
                         izin: {
-                            kadet_id: dataApel[index].kadet_id,
                             izin_nama: data.get(`izin-${dataApel[index].data_apel_id}`),
                             izin_detail: data.get(`detail-izin-${dataApel[index].data_apel_id}`),
                             foto: document.getElementById(`display-foto-izin-${dataApel[index].data_apel_id}`).src
@@ -450,7 +450,7 @@ const handleEditApel = async (event, dataApel, cek) => {
                             throw Error
                         }
                         kirim.minor.sakit.push({
-                            sakit_id: dataApel[index].sakit_id,
+                            sakit_id: dataApel[index].sakit.sakit_id,
                             sakit_nama: data.get(`sakit-${dataApel[index].data_apel_id}`),
                             sakit_detail: data.get(`detail-sakit-${dataApel[index].data_apel_id}`),
                             foto_id: dataApel[index].sakit.foto_id,
@@ -463,7 +463,7 @@ const handleEditApel = async (event, dataApel, cek) => {
                             throw Error
                         }
                         kirim.minor.izin.push({
-                            izin_id: dataApel[index].izin_id,
+                            izin_id: dataApel[index].izin.izin_id,
                             izin_nama: data.get(`izin-${dataApel[index].data_apel_id}`),
                             izin_detail: data.get(`detail-izin-${dataApel[index].data_apel_id}`),
                             foto_id: dataApel[index].izin.foto_id,
@@ -476,7 +476,7 @@ const handleEditApel = async (event, dataApel, cek) => {
         }
         console.log(dataApel)
         console.log('kirim', kirim)
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/editApel`,
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/laporan/apel/edit`,
             kirim,
             {
                 headers: {
@@ -491,7 +491,7 @@ const handleEditApel = async (event, dataApel, cek) => {
                     document.getElementById("edit-apel-success").classList.remove('d-none')
                     await sleep(1500)
                     document.getElementById("edit-apel-success").classList.add('d-none')
-                    //window.location.reload()
+                    window.location.reload()
                 } else {
                     console.log("udah kirim")
                     document.getElementById("edit-apel-loading").classList.add('d-none')
@@ -534,7 +534,7 @@ const handleForwardApel = async (event, tingkat, subordinates) => {
             jenis_apel: data.get('jenis-apel'),
             subordinates_lap_id: lap_id
         })
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/lapApel`,
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/laporan/apel/forward`,
             {
                 jenis_apel: data.get('jenis-apel'),
                 subordinates_lap_id: lap_id
@@ -578,25 +578,30 @@ const handleForwardApel = async (event, tingkat, subordinates) => {
 
 }
 
-const handleLapGiat = async (event, kadets, foto) => {
+const handleLapGiat = async (event, kadets, foto, attachment) => {
     event.preventDefault();
     document.getElementById("lap-giat-loading").classList.remove("d-none")
     const data = new FormData(event.currentTarget);
-    var kadet_id =
-        console.log({
-            nama_kegiatan: data.get('input-nama-giat'),
-            date_kegiatan: data.get('input-date-giat'),
-            detail_kegiatan: data.get('input-detail-giat'),
-            peserta: kadets,
-            foto: document.getElementById('dokumentasi').src
-        })
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/lapGiat`,
+    var list_attachment = []
+    for (let index = 0; index < attachment.length; index++) {
+        list_attachment.push(data.get(`attachment-${attachment[index]}`))
+    }
+    console.log({
+        nama_kegiatan: data.get('input-nama-giat'),
+        date_kegiatan: data.get('input-date-giat'),
+        detail_kegiatan: data.get('input-detail-giat'),
+        peserta: kadets,
+        foto: foto,
+        attachment: list_attachment
+    })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/laporan/giat/create`,
         {
             nama_kegiatan: data.get('input-nama-giat'),
             date_kegiatan: data.get('input-date-giat'),
             detail_kegiatan: data.get('input-detail-giat'),
             peserta: kadets,
-            foto: document.getElementById('dokumentasi').src
+            foto: foto,
+            attachment: list_attachment
         },
         {
             headers: {

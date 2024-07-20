@@ -14,8 +14,7 @@ const handleChangeFoto = async (selectedFile) => {
         reader.readAsDataURL(compressedFile)
         reader.onload = (e) => {
             foto = {
-                url: e.target.result,
-                file: compressedFile
+                url: e.target.result
             }
         }
     }

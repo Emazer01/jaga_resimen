@@ -121,7 +121,7 @@ export const KelolaAkun = () => {
                         </div>
                         <div className='p-1 p-lg-2 pb-3 col-12 d-flex flex-wrap'>
                             <div className='card shadow w-100'>
-                                <h4 className='card-header d-flex border-bottom'>Akun Kadet
+                                <h4 className='card-header d-flex border-bottom'>Akun
                                     <div className='ms-auto'>
                                         <i className="fs-2 bi bi-people-fill"></i>
                                     </div>
@@ -135,11 +135,10 @@ export const KelolaAkun = () => {
                                         <table className="table table-striped w-100">
                                             <thead>
                                                 <tr className='border-bottom'>
-                                                    <th scope="col">Id</th>
+                                                    <th scope="col" className='d-none d-md-table-cell'>Id</th>
                                                     <th scope="col">Username</th>
-                                                    <th scope="col">Nama</th>
                                                     <th scope="col">Role</th>
-                                                    <th scope="col">Status</th>
+                                                    <th scope="col" className='d-none d-md-table-cell'>Status</th>
                                                     <th scope="col">Action</th>
                                                 </tr>
                                             </thead>
@@ -147,11 +146,10 @@ export const KelolaAkun = () => {
                                                 {currentPosts.map(akun => {
                                                     return (
                                                         <tr key={akun.akun_id}>
-                                                            <td>{akun.akun_id}</td>
+                                                            <td className='d-none d-md-table-cell'>{akun.akun_id}</td>
                                                             <td>{akun.username}</td>
-                                                            <td>{akun.kadet_nama}</td>
                                                             <td>{akun.role_target}</td>
-                                                            <td>{akun.status_nama}</td>
+                                                            <td className='d-none d-md-table-cell'>{akun.status}</td>
                                                             <td className='p-0'>
                                                                 <button className='btn btn-danger m-1'>Nonaktifkan</button>
                                                                 <button className='btn btn-info m-1'>Reset Password</button>
